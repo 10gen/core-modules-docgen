@@ -189,7 +189,7 @@ public class JavadocToDB {
 
     public static boolean start(RootDoc root) {
 
-        DBApiLayer db = DBProvider.get("kristina", "127.0.0.1", 27017);
+        DBApiLayer db = DBProvider.get("admin", "127.0.0.1", 27017);
         DBCollection collection = db.getCollection("doc");
 
         ClassDoc[] classes = root.classes();

@@ -44,7 +44,7 @@ public class JSDocToDB {
 		JSObjectBase obj = new JSObjectBase();
 		obj.set("_index", ss);
 
-		DBApiLayer db = DBProvider.get("kristina", "127.0.0.1", 27017);
+		DBApiLayer db = DBProvider.get("admin", "127.0.0.1", 27017);
                 DBCollection collection = db.getCollection("doc");
                 collection.save(obj);
 	}
