@@ -14,7 +14,7 @@ public class JSDocToDB {
 			System.out.println("arg0: "+args[0]);
 		}
 
-		Process p = Runtime.getRuntime().exec("java -jar jsrun.jar app/run.js "+src+" -r -t=templates/json", null, new File("/home/k/gitroot/external/jsdoc-toolkit/current/"));
+		Process p = Runtime.getRuntime().exec("java -jar jsrun.jar app/run.js "+src+" -r -t=templates/json", null, new File("../core-modules/docgen/"));
                 BufferedWriter in = new BufferedWriter(new OutputStreamWriter( p.getOutputStream()));
                 in.close();
 
