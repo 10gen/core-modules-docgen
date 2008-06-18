@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>OBM JS Docs</title>
+	<link rel="stylesheet" href="css/objects.css" type="text/css" media="screen">
+		<script type="text/javascript" src="js/cooltree.js"></script>
+		<script type="text/javascript" src="js/tree_format_objs.js"></script>
+	<script type="text/javascript">
+	parent.main.location = "{+data.htm+}";
+	var TREE_NODES = [<if test="data.classes.length > 0">
+			 ['Constructors', null, null <for each="c" in="data.classes">,['<img src="images/constructor.gif" style="border: none; vertical-align: middle; text-decoration: none;" width="16" height="16" /> <span class="under">{+c+}</span>', '{+data.htm+}#{+c+}', 'main']</for> ]
+			</if>
+			<if test="data.namespaces.length > 0">
+			 ['Namespaces', null, null <for each="c" in="data.namespaces">,['<img src="images/constructor.gif" style="border: none; vertical-align: middle; text-decoration: none;" width="16" height="16" /> <span class="under">{+c+}</span>', '{+data.htm+}#{+c+}', 'main']</for> ]
+			</if>
+			<if test="data.funcs.length > 0">
+			<if test="data.classes.length !== 0">,</if>
+			['Functions', null, null <for each="f" in="data.funcs">,['<img src="images/function.gif" style="border: none; vertical-align: middle; text-decoration: none;" width="16" height="16" /> <span class="under">{+f+}</span>', '{+data.htm+}#{+f+}', 'main'] </for> ]
+			</if>
+			<if test="data.vars.length > 0">
+			<if test="data.funcs.length !== 0 || data.classes.length !== 0">,</if>
+			['Objects', null, null <for each="v" in="data.vars">,['<img src="images/object.gif" style="border: none; vertical-align: middle; text-decoration: none;" width="16" height="16" /> <span class="under">{+v+}</span>', '{+data.htm+}#{+v+}', 'main'] </for> ]
+			</if>]
+	</script>
+</head>
+<body class="objs">
+<div class="sectionHead">Modules</div>
+<center>[ <a href="javascript:doctree.expandAll()" class="under">Expand All</a> ] [ <a href="javascript:doctree.collapseAll()" class="under">Collapse All</a> ]</center>
+<script type="text/javascript"> var doctree = new COOLjsTree("tree1", TREE_NODES, TREE_FORMAT); </script>
+</body>
+</html>

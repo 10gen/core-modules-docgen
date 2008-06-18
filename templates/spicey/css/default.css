@@ -1,0 +1,150 @@
+body,a
+{
+	color: #000;
+	font: 12px verdana;
+}
+
+ul
+{
+	list-style-type: none;
+	margin-left: 10px;
+	padding-left: 10px;
+}
+
+.content { }
+.docs { }
+.signature { font-weight: normal; }
+.code {
+	font: 11px monaco,monospace;
+	padding: 4px;
+	margin-left: 18px;
+	border: 1px dashed #ccc;
+}
+
+.itemTitle
+{
+	font-size: 12px;
+	font-weight: bold;
+	height: 16px;
+}
+
+.item { }
+
+.libHead
+{
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #A0C0FF;
+	color: #fff;
+	margin-top: 18px;
+	padding: 2px 4px 2px 4px;
+	border: 1px solid #608090;
+}
+
+.sectionHead
+{
+	font-size: 15px;
+	font-weight: bold;
+	background-color: #70B0FF;
+	color: #fff;
+	margin-top: 18px;
+	padding: 2px;
+	padding-left: 5px;
+	border: 1px solid #608090;
+}
+
+.section
+{
+	padding: 8px;
+	border: 1px #8A92BC solid;
+	margin: 4px;
+	background-color: #E8F0F8;
+}
+
+.detailHead
+{
+	border-bottom: 1px #8FB685 dotted;
+	font-size: 12px;
+	font-weight: bold;
+	color: #798E73;
+	margin-top: 18px;
+}
+
+.desc { padding: 8px; }
+
+.fileHead
+{
+	background-image: url(../images/file.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.dirHead
+{
+	padding-left: 0px;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.overview .itemTitle
+{
+	background-image: url(../images/overview.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+
+}
+
+.constructor .itemTitle
+{
+	background-image: url(../images/constructor.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.function .itemTitle
+{
+	background-image: url(../images/function.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.object .itemTitle
+{
+	background-image: url(../images/object.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.type
+{
+	font-style: italic;
+	color: #999;
+	font-weight: normal;
+}
+
+.itemTitle a.type { font-weight: bold; }
+
+.finePrint
+{
+	color: #878787;
+	font-family: verdana;
+	font-size: 10px;
+	text-align: right;
+}
+
+.params td { padding-right: 10px; }
+
+.deprecated
+{
+        color: #666;
+        font-weight: normal;
+}
+
+.deprecated del
+{
+        color: #000;
+}

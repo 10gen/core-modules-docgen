@@ -1,0 +1,14 @@
+Spicey Template, based (somewhat) on epydocs output
+
+For JsDoc ToolKit : http://code.google.com/p/jsdoc-toolkit/
+
+Vince Spicer vinces1979@gmail.com
+
+ -- To use place the spicey folder into your templates directory
+ -- example command:: java -jar app/js.jar app/run.js -t=templates/spicey -r=1 -a /home/me/source/ -d=/home/me/output
+
+ -- To enable the base function vars, replace the app/JsParse.js with the one included in this package
+
+Enjoy
+
+

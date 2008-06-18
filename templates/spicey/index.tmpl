@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>OBM JS Docs</title> <link rel="stylesheet" href="css/default.css" type="text/css" media="screen">
+	<script type="text/javascript" src="js/cooltree.js"></script> <script type="text/javascript" src="js/tree_format.js"></script>
+	<script type="text/javascript">
+	{! var count=0; !}
+	var TREE_NODES = [<for each="dir" in="keys(data).sort()">
+			<if test="dir !== 'dirs'">	['{+dir.replace(/\\/gi, "\\\\")+}', null, null <for each="file" in="keys(data[dir]).sort()">,['{+data[dir][file].name+}','_objs_{+data[dir][file].htm+}', 'objects'] </for> ]	{! count++; !}</if>
+			<if test="count < data.dirs">,</if>
+			</for>]
+	</script>
+</head>
+<body>
+<div class="sectionHead">JS Docs Index</div>
+<center>[ <a href="javascript:doctree.expandAll()">Expand All</a> ] [ <a href="javascript:doctree.collapseAll()">Collapse All</a> ]</center>
+<script type="text/javascript">	var doctree = new COOLjsTree("tree1", TREE_NODES, TREE_FORMAT); </script>
+</body>
+</html>

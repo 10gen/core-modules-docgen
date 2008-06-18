@@ -1,0 +1,25 @@
+<%
+if(request.newdoc) {
+   javaStatic("ed.doc.Generate", "toDB", request.corejs);
+}
+else if(request.regen) {
+    var d = db.doc.find();
+    while(d.hasNext()) {
+        var cls = d.next();
+        javaStatic("ed.doc.Generate", "toHTML", tojson(cls._index));
+    }
+}
+%>
+
+<div id="header">
+<form>
+<fieldset><legend>Sources to include in doc</legend>
+<input type="checkbox" name="corejs" /> corejs <br />
+<input type="checkbox" name="ed" /> ed <br />
+<span style="color: red">Non-functional! --<input type="submit" name="newdoc" value="Doc to DB" />--</span>
+</fieldset>
+<input type="submit" name="regen" value="HTML from DB" />
+</form>
+
+
+</div>
