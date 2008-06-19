@@ -1,16 +1,18 @@
 IO.include("../templates/json/json2.js");
-// check on multiple file input
 // move to www
 
 function publish(symbolSet) {
-    print("made it here1");
     if(!symbolSet.fromJava) {
-        symbolSet = eval("("+symbolSet+")");
+        try {
+            symbolSet = eval("("+symbolSet+")");
+        }
+        catch(e) {
+            print("error eval-ing symbolSet: "+symbolSet);
+        }
     }
 
-    print("made it here2");
     publish.conf = {  // trailing slash expected for dirs
-	ext: ".html",
+	ext: ".jxp",
 	outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
 	templatesDir: SYS.pwd+"../templates/jsdoc2/",
         symbolsDirName : "symbols/"
@@ -18,7 +20,6 @@ function publish(symbolSet) {
     publish.conf.symbolsDir = publish.conf.outDir+"/symbols/";
     publish.conf.srcDir = publish.conf.outDir+"/symbols/src/";
 
-    print("made it here3");
     if (JSDOC.opt.s && defined(Link) && Link.prototype._makeSrcLink) {
 	Link.prototype._makeSrcLink = function(srcFilePath) {
 	    return "&lt;"+srcFilePath+"&gt;";
@@ -26,7 +27,6 @@ function publish(symbolSet) {
     }
     if( !JSDOC.opt.D ) JSDOC.opt.D = {};
 
-    print("made it here bleh");
     IO.mkPath((publish.conf.outDir+"symbols/src").split("/"));
 
     // used to check the details of things being linked to
@@ -46,8 +46,6 @@ function publish(symbolSet) {
     function isaFile($) { return ($.is("FILE"))}
     function isaClass($) { return ($.is("CONSTRUCTOR") || $.isNamespace)}
 
-    print("made it here3");
-    var ladida = true;
     if(true) {
         var classes = [];
         var symbols = [];
@@ -83,7 +81,6 @@ function publish(symbolSet) {
     }
 */
 
-    print("made it here4");
     Link.base = "../";
     publish.classesIndex = classesTemplate.process(classes); // kept in memory
 
@@ -99,12 +96,21 @@ function publish(symbolSet) {
     Link.base = "";
     publish.classesIndex = classesTemplate.process(classes);
     try {
+        // get all files from outDir
+        var allDocFiles = IO.ls(publish.conf.outDir+"symbols/");
+        var allDocNames = [];
+        for(var i in allDocFiles) {
+            // get rid of beginning ../ and trailing .jxp
+            allDocNames.push({alias: allDocFiles[i].substring(allDocFiles[i].lastIndexOf("/")+1, allDocFiles[i].lastIndexOf("."))});
+            if(!Link.symbolSet[allDocNames[i]]) {
+                Link.symbolSet[allDocNames[i].alias] = {alias : allDocNames[i].alias, isa: "CONSTRUCTOR"};
+            }
+        }
 	var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
     }
     catch(e) { print(e.message); quit(); }
 
-    print("made it here5");
-    var classesIndex = classesindexTemplate.process(classes);
+    var classesIndex = classesindexTemplate.process(allDocNames);
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
     classesindexTemplate = classesIndex = classes = null;
 
@@ -116,7 +122,6 @@ function publish(symbolSet) {
     var documentedFiles = symbols.filter(isaFile);
     var allFiles = [];
 
-    print("made it here6");
     var files = files || [];
     for (var i = 0; i < files.length; i++) {
 	allFiles.push(new JSDOC.Symbol(files[i], [], "FILE", new JSDOC.DocComment("/** */")));
@@ -129,13 +134,11 @@ function publish(symbolSet) {
         }
     }
 
-    print("made it here7");
     allFiles = allFiles.sort(makeSortby("name"));
     var filesIndex = fileindexTemplate.process(allFiles);
 
     IO.saveFile(publish.conf.outDir, "files"+publish.conf.ext, filesIndex);
     fileindexTemplate = filesIndex = files = null;
-    print("made it here8");
 
 }
 

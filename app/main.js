@@ -68,11 +68,11 @@ function main() {
 			}
 		}
 	}
-
+/*
 	if (LOG.warnings.length) {
 		print(LOG.warnings.length+" warning"+(LOG.warnings.length != 1? "s":"")+".");
 	}
-
+*/
 	if (LOG.out) {
 		LOG.out.flush();
 		LOG.out.close();

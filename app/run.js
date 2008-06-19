@@ -16,13 +16,13 @@ LOG = {
 		msg = ">> WARNING: "+msg;
 		LOG.warnings.push(msg);
 		if (LOG.out) LOG.out.write(msg+"\n");
-		else print(msg);
+//		else print(msg);
 	},
 
 	inform: function(msg) {
 		msg = " > "+msg;
 		if (LOG.out) LOG.out.write(msg+"\n");
-		else if (typeof LOG.verbose != "undefined" && LOG.verbose) print(msg);
+//		else if (typeof LOG.verbose != "undefined" && LOG.verbose) print(msg);
 	}
 };
 LOG.warnings = [];

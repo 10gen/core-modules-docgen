@@ -6,14 +6,14 @@ import ed.db.*;
 
 public class JavadocToDB {
 
-	public static void getTags(Doc from, JSObjectBase dest) {
+    public static void getTags(Doc from, JSObjectBase dest) {
         Tag cTags[] = from.tags();
         for(int j=0; j<cTags.length; j++) {
-        	dest.set(cTags[j].name().substring(1), cTags[j].text());
+            dest.set(cTags[j].name().substring(1), cTags[j].text());
         }
-	}
+    }
 
-	public static JSObjectBase getMethod(MethodDoc m) {
+    public static JSObjectBase getMethod(MethodDoc m) {
         JSObjectBase tempMethod = new JSObjectBase();
         tempMethod.set("desc", m.commentText());
         tempMethod.set("name", m.name());
@@ -33,21 +33,21 @@ public class JavadocToDB {
 
         Tag mTags[] = m.tags();
         for(int k=0; k<mTags.length; k++) {
-        	if(mTags[k].name().equals("@return")) {
-        		JSArray returns = new JSArray();
-        		JSObjectBase tempReturn = new JSObjectBase();
+            if(mTags[k].name().equals("@return")) {
+                JSArray returns = new JSArray();
+                JSObjectBase tempReturn = new JSObjectBase();
                 tempReturn.set("title", "return");
                 tempReturn.set("desc", mTags[k].text());
                 tempReturn.set("type", m.returnType().typeName());
                 returns.add(tempReturn);
                 tempMethod.set("returns", returns);
-        	}
-        	else {
-        		tempMethod.set(mTags[k].name(), mTags[k].text());
-        	}
+            }
+            else {
+                tempMethod.set(mTags[k].name(), mTags[k].text());
+            }
         }
         if(!tempMethod.containsKey("returns"))
-        	tempMethod.set("returns", new JSArray());
+            tempMethod.set("returns", new JSArray());
 
 
         ParamTag params[] = m.paramTags();
@@ -65,10 +65,10 @@ public class JavadocToDB {
         tempMethod.set("_params", jsParams);
         tempMethod.set("params", jsParams);
         return tempMethod;
-	}
+    }
 
-	public static JSObjectBase getConstructor(ConstructorDoc m) {
-		JSObjectBase tempMethod = new JSObjectBase();
+    public static JSObjectBase getConstructor(ConstructorDoc m) {
+        JSObjectBase tempMethod = new JSObjectBase();
         tempMethod.set("desc", m.commentText());
         tempMethod.set("name", m.name());
         tempMethod.set("alias", m.qualifiedName());
@@ -94,7 +94,7 @@ public class JavadocToDB {
         }
         tempMethod.set("_params", jsParams);
         return tempMethod;
-	}
+    }
 
     public static JSObjectBase getClasses(ClassDoc c) {
         JSObjectBase temp = new JSObjectBase();
@@ -114,7 +114,7 @@ public class JavadocToDB {
         ClassDoc extend[] = c.interfaces();
         JSArray jsExtends = new JSArray();
         for(int j=0; j<extend.length; j++) {
-        	jsExtends.add(extend[j].qualifiedName());
+            jsExtends.add(extend[j].qualifiedName());
         }
         temp.set("augments", jsExtends);
 
@@ -122,7 +122,7 @@ public class JavadocToDB {
         ConstructorDoc cons[] = c.constructors();
         JSArray jsCons = new JSArray();
         for(int j=0; j<cons.length; j++) {
-        	jsCons.add(getConstructor(cons[j]));
+            jsCons.add(getConstructor(cons[j]));
         }
         temp.set("constructors", jsCons);
 

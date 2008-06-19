@@ -8,6 +8,7 @@ function publish(symbolSet) {
         }
         catch(e) {
             print("error eval-ing symbolSet: "+symbolSet);
+            quit();
         }
     }
 

@@ -172,9 +172,9 @@ JSDOC.SymbolSet.prototype.resolveMemberOf = function() {
 			var container = this.getSymbol(symbol.memberOf);
 			if (!container) {
 				if (JSDOC.Lang.isBuiltin(symbol.memberOf)) container = JSDOC.Parser.addBuiltin(symbol.memberOf);
-				/*else {
-					LOG.inform("Can't document "+symbol.name +" as a member of undocumented symbol "+symbol.memberOf+".");
-				}*/
+				else {
+					LOG.warn("Can't document "+symbol.name +" as a member of undocumented symbol "+symbol.memberOf+".");
+				}
 			}
 
 			if (container) container.addMember(symbol);
@@ -202,7 +202,7 @@ JSDOC.SymbolSet.prototype.walk = function(symbol) {
 
 			symbol.inheritsFrom.push(contributer.alias);
 			if (!isUnique(symbol.inheritsFrom)) {
-				//LOG.warn("Can't resolve augments: Circular reference: "+symbol.alias+" inherits from "+contributer.alias+" more than once.");
+				LOG.warn("Can't resolve augments: Circular reference: "+symbol.alias+" inherits from "+contributer.alias+" more than once.");
 			}
 			else {
 				var cmethods = contributer.methods;

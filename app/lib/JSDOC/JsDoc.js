@@ -7,35 +7,35 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 	if (opt) {
 		JSDOC.opt = opt;
 	}
-	
+
 	// the -c option: use a configuration file
 	if (JSDOC.opt.c) {
 		eval("JSDOC.conf = " + IO.readFile(JSDOC.opt.c));
-		
+
 		LOG.inform("Using configuration file at '"+JSDOC.opt.c+"'.");
-		
+
 		for (var c in JSDOC.conf) {
 			if (c !== "D" && !defined(JSDOC.opt[c])) { // commandline overrules config file
 				JSDOC.opt[c] = JSDOC.conf[c];
 			}
 		}
-		
+
 		if (typeof JSDOC.conf["_"] != "undefined") {
 			JSDOC.opt["_"] = JSDOC.opt["_"].concat(JSDOC.conf["_"]);
 		}
-		
+
 		LOG.inform("With configuration: ");
 		for (var o in JSDOC.opt) {
 			LOG.inform("    "+o+": "+JSDOC.opt[o]);
 		}
 	}
-	
+
 	if (JSDOC.opt.h) {
 		JSDOC.usage();
 		quit();
 	}
-	
-	// defend against options that are not sane 
+
+	// defend against options that are not sane
 	if (JSDOC.opt._.length == 0) {
 		LOG.warn("No source files to work on. Nothing to do.");
 		quit();
@@ -43,7 +43,7 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 	if (JSDOC.opt.t === true || JSDOC.opt.d === true) {
 		JSDOC.usage();
 	}
-	
+
 	if (typeof JSDOC.opt.d == "string") {
 		if (!JSDOC.opt.d.charAt(JSDOC.opt.d.length-1).match(/[\\\/]/)) {
 			JSDOC.opt.d = JSDOC.opt.d+"/";
@@ -52,12 +52,12 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 		IO.mkPath(JSDOC.opt.d);
 	}
 	if (JSDOC.opt.e) IO.setEncoding(JSDOC.opt.e);
-	
+
 	// the -r option: scan source directories recursively
-	if (typeof JSDOC.opt.r == "boolean") JSDOC.opt.r = 10;
+	if (typeof JSDOC.opt.r == "boolean") JSDOC.opt.r = 50;
 	else if (!isNaN(parseInt(JSDOC.opt.r))) JSDOC.opt.r = parseInt(JSDOC.opt.r);
 	else JSDOC.opt.r = 1;
-	
+
 	// the -D option: define user variables
 	var D = {};
 	if (JSDOC.opt.D) {
@@ -77,7 +77,7 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 	// Load additional file handlers
 	// the -H option: filetype handlers
 	JSDOC.handlers = {};
-/*	
+/*
 	if (JSDOC.opt.H) {
 		for (var i = 0; i < JSDOC.opt.H.length; i++) {
 			var handlerDef = JSDOC.opt.H[i].split(":");
@@ -91,7 +91,7 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 			}
 		}
 	}
-*/	
+*/
 	// Give plugins a chance to initialize
 	if (defined(JSDOC.PluginManager)) {
 		JSDOC.PluginManager.run("onInit", this);
@@ -110,12 +110,12 @@ JSDOC.JsDoc = function(/**object*/ opt) {
  */
 JSDOC.JsDoc.prototype._getSrcFiles = function() {
 	this.srcFiles = [];
-	
+
 	var ext = ["js"];
 	if (JSDOC.opt.x) {
 		ext = JSDOC.opt.x.split(",").map(function($) {return $.toLowerCase()});
 	}
-	
+
 	for (var i = 0; i < JSDOC.opt._.length; i++) {
 		this.srcFiles = this.srcFiles.concat(
 			IO.ls(JSDOC.opt._[i], JSDOC.opt.r).filter(
@@ -126,7 +126,7 @@ JSDOC.JsDoc.prototype._getSrcFiles = function() {
 			)
 		);
 	}
-	
+
 	return this.srcFiles;
 }
 
@@ -134,7 +134,7 @@ JSDOC.JsDoc.prototype._parseSrcFiles = function() {
 	JSDOC.Parser.init();
 	for (var i = 0, l = this.srcFiles.length; i < l; i++) {
 		var srcFile = this.srcFiles[i];
-		
+
 		try {
 			var src = IO.readFile(srcFile);
 		}
@@ -146,7 +146,7 @@ JSDOC.JsDoc.prototype._parseSrcFiles = function() {
 //		var ext = FilePath.fileExtension(srcFile);
 // 		if (JSDOC.handlers[ext]) {
 // 			LOG.inform(" Using external handler for '" + ext + "'");
-// 
+//
 // 			symbols = symbols.concat(JSDOC.handlers[ext].handle(srcFile, src));
 // 			symbols.handler = JSDOC.handlers[ext];
 // 		}
@@ -154,7 +154,7 @@ JSDOC.JsDoc.prototype._parseSrcFiles = function() {
 			// The default (JSDOC) handler
 			var tr = new JSDOC.TokenReader();
 			var ts = new JSDOC.TokenStream(tr.tokenize(new JSDOC.TextStream(src)));
-	
+
 			JSDOC.Parser.parse(ts, srcFile);
 //		}
 	}
