@@ -1,32 +1,5 @@
-<%
-
-core.util.doc();
-
-if(request.newdoc && request.js) Util.Doc.JSToDb(request.js);
-else if(request.newdoc && request.java) Util.Doc.JavadocToDb(request.java);
-else if(request.regen) Util.Doc.DbToHTML();
-
-%>
-
 <div id="header">
-
-<fieldset><legend>Sources</legend>
-Generate documentation from files or folders.
-<form>
-  <legend>Javascript path: </legend>
-  <input type="text" name="js" />
-  <input type="submit" name="newdoc" value="Generate" />
+<form action="search" method="POST" />
+<input type="text" name="search" /><input type="submit" />
 </form>
-<form>
-  <legend>Java path: </legend>
-  <input type="text" name="java" />
-  <input type="submit" name="newdoc" value="Generate" />
-</form>
-</fieldset>
-
-<form>
-  <input type="submit" name="regen" value="HTML from DB" />
-</form>
-
-
 </div>

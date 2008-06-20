@@ -4,12 +4,15 @@ if(!Doc.admin) Doc.admin = {};
 
 // Get java and js src and send their doc to the db
 Doc.admin.toDB = function() {
+    log("here");
     // clean out the doc db
     db.doc.remove({});
 
     // restock
     var js = db.doc.src.js.find();
+    log("count: "+db.doc.src.js.find().count());
     while(js.hasNext()) {
+        log("here");
         var z = js.next();
         Util.Doc.JSToDb(z.filename);
     }

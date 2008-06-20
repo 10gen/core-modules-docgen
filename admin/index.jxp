@@ -5,13 +5,7 @@ Generate documentation from files or folders.
 
 core.modules.docgen.admin.generate();
 
-if(request.id) {
-    if(request.src_type == "js")
-        db.doc.src.js.remove({_id: request.id});
-    else if(request.src_type == "java")
-        db.doc.src.java.remove({_id: request.id});
-}
-else if(request.action == "Do Everything") {
+if(request.action == "Do Everything") {
     Doc.admin.all();
 }
 else if(request.action == "Source to DB") {
@@ -19,6 +13,12 @@ else if(request.action == "Source to DB") {
 }
 else if(request.action == "DB to HTML") {
     Doc.admin.toHTML();
+}
+else if(request.id) {
+    if(request.src_type == "js")
+        db.doc.src.js.remove({_id: request.id});
+    else if(request.src_type == "java")
+        db.doc.src.java.remove({_id: request.id});
 }
 else {
     if(request.js && request.js.trim() != "")
@@ -29,7 +29,7 @@ else {
 
 %>
 
-<form id="deleter">
+<form method="POST" id="deleter">
   <input type="hidden" name="src_type" id="deleter_src_type" />
   <input type="hidden" name="id" id="deleter_id" />
 </form>
@@ -58,7 +58,7 @@ function deleteJavaSrc(id) {
 
 <h3>Sources to be included:</h3>
 <div id="js_srcs">
-  <form>
+  <form method="POST">
     <legend>Add JavaScript file or folder: </legend>
     <input type="text" name="js" />
     <input type="submit" name="addJSSrc" value="Add" />
@@ -75,7 +75,7 @@ function deleteJavaSrc(id) {
 </div>
 
 <div id="java_srcs" >
-  <form>
+  <form method="POST">
     <legend>Add Java file or folder: </legend>
     <input type="text" name="java" />
     <input type="submit" name="addJavaSrc" value="Add" />
