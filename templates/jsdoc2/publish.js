@@ -82,20 +82,6 @@ function publish(symbolSet) {
     }
 */
 
-    Link.base = "../";
-    publish.classesIndex = classesTemplate.process(classes); // kept in memory
-
-    for (var i = 0, l = classes.length; i < l; i++) {
-        if(classes[i] == true) continue;
-	var symbol = classes[i];
-	var output = "";
-	output = classTemplate.process(symbol);
-
-	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
-    }
-    // regenrate the index with different relative links
-    Link.base = "";
-    publish.classesIndex = classesTemplate.process(classes);
     try {
         // get all files from outDir
         var allDocFiles = IO.ls(publish.conf.outDir+"symbols/");
@@ -110,6 +96,21 @@ function publish(symbolSet) {
 	var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
     }
     catch(e) { print(e.message); quit(); }
+
+    Link.base = "../";
+    publish.classesIndex = classesTemplate.process(classes); // kept in memory
+
+    for (var i = 0, l = classes.length; i < l; i++) {
+        if(classes[i] == true) continue;
+	var symbol = classes[i];
+	var output = "";
+	output = classTemplate.process(symbol);
+
+	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
+    }
+    // regenrate the index with different relative links
+    Link.base = "";
+    publish.classesIndex = classesTemplate.process(classes);
 
     var classesIndex = classesindexTemplate.process(allDocNames);
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
