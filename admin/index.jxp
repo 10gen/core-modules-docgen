@@ -6,13 +6,13 @@ Generate documentation from files or folders.
 core.modules.docgen.admin.generate();
 
 if(request.action == "Do Everything") {
-    Doc.admin.all();
+    Doc.admin.all(request.d);
 }
 else if(request.action == "Source to DB") {
     Doc.admin.toDB();
 }
 else if(request.action == "DB to HTML") {
-    Doc.admin.toHTML();
+    Doc.admin.toHTML(request.d);
 }
 else if(request.id) {
     if(request.src_type == "js")
@@ -47,9 +47,19 @@ function deleteJavaSrc(id) {
     document.getElementById("deleter").submit();
 }
 
+function showMessage() {
+    document.getElementById("loading_msg").style.display = "block";
+}
+
 </script>
 
-<form method="POST">
+<div id="loading_msg" style="background: white; border: 1px dotted black; text-align: center; display: none; position: absolute; margin-left: auto; margin-right: auto; top: 30%; width: 300px; height: 150px;">
+Loading...
+This may take a while (about 1 second per file).
+</div>
+
+<form method="POST" onsubmit="showMessage()">
+  <legend>Write to </legend><input type="text" name="d" value="doc/" />
   <input type="submit" name="action" value="Do Everything" />
   <input type="submit" name="action" value="Source to DB" />
   <input type="submit" name="action" value="DB to HTML" />
