@@ -19,7 +19,6 @@ function publish(symbolSet) {
         symbolsDirName : "symbols/"
     };
     publish.conf.symbolsDir = publish.conf.outDir+"/symbols/";
-    publish.conf.srcDir = publish.conf.outDir+"/symbols/src/";
 
     if (JSDOC.opt.s && defined(Link) && Link.prototype._makeSrcLink) {
 	Link.prototype._makeSrcLink = function(srcFilePath) {
@@ -28,7 +27,7 @@ function publish(symbolSet) {
     }
     if( !JSDOC.opt.D ) JSDOC.opt.D = {};
 
-    IO.mkPath((publish.conf.outDir+"symbols/src").split("/"));
+    IO.mkPath((publish.conf.outDir+"symbols").split("/"));
 
     // used to check the details of things being linked to
     Link.symbolSet = symbolSet;
@@ -82,6 +81,13 @@ function publish(symbolSet) {
     }
 */
 
+    // hack: strip the ../../path off of the output dir
+    var docUrl = publish.conf.outDir;
+    while(docUrl.indexOf("..") >= 0) {
+        docUrl = docUrl.substring(docUrl.indexOf("/")+1);
+    }
+    docUrl = docUrl.substring(docUrl.indexOf("/")+1);
+
     try {
         // get all files from outDir
         var allDocFiles = IO.ls(publish.conf.outDir+"symbols/");
@@ -97,8 +103,8 @@ function publish(symbolSet) {
     }
     catch(e) { print(e.message); quit(); }
 
-    Link.base = "../";
-    publish.classesIndex = classesTemplate.process(classes); // kept in memory
+    Link.base = "../"+docUrl;
+    publish.classesIndex = classesTemplate.process(allDocNames); // kept in memory
 
     for (var i = 0, l = classes.length; i < l; i++) {
         if(classes[i] == true) continue;
@@ -109,8 +115,8 @@ function publish(symbolSet) {
 	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
     }
     // regenrate the index with different relative links
-    Link.base = "";
-    publish.classesIndex = classesTemplate.process(classes);
+    Link.base = ""+docUrl;
+    publish.classesIndex = classesTemplate.process(allDocNames);
 
     var classesIndex = classesindexTemplate.process(allDocNames);
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
