@@ -6,10 +6,10 @@
   var url = request.getURI();
   url = url.substring(0, url.lastIndexOf("/"));
 
-var symbols = true;
-if(url.indexOf("symbols") > 0) {
-    symbols = false;
-}
+  var symbols = true;
+  if(url.indexOf("symbols") > 0) {
+      symbols = false;
+  }
 
   core.core.file();
 

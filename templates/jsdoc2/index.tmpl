@@ -22,12 +22,31 @@
 		<div id="content">
 			<h1 class="classTitle">Class Index</h1>
 
-			<for each="thisClass" in="data">
-			<div>
-				<h2>{+(new Link().toSymbol(thisClass.alias))+}</h2>
+  <%
+  var url = request.getURI();
+  url = url.substring(0, url.lastIndexOf("/"));
+
+  var symbols = true;
+  if(url.indexOf("symbols") > 0) {
+      symbols = false;
+  }
+
+  core.core.file();
+
+  var dir = openFile(url+(symbols ? "/symbols" : ""));
+  if(dir.exists() && dir.isDirectory()) {
+      var f = dir.listFiles();
+      for(var i in f) {
+          %>
+  <div>
+          <h2><a href="<%= url + (symbols ? "/symbols/" : "/") + f[i].filename %>"><%= f[i].filename.substring(0, f[i].filename.lastIndexOf(".")) %></a></h2>
+
 			</div>
 			<hr />
-			</for>
+          <%
+      }
+  }
+  %>
 
 		</div>
 		<div class="fineprint" style="clear:both">

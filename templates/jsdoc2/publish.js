@@ -35,6 +35,7 @@ function publish(symbolSet) {
     try {
 	var classTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"class.tmpl");
 	var classesTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
+        var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
     }
     catch(e) {
 	print(e.message);
@@ -65,21 +66,8 @@ function publish(symbolSet) {
         symbolSet.getSymbol = function(str) { return symbolSet[str]; };
 
     }
-/*    else {
-        var symbols = symbolSet.toArray();
 
-        if(JSDOC.opt.srcFiles) {
-	    var files = JSDOC.opt.srcFiles;
- 	    for (var i = 0, l = files.length; i < l; i++) {
- 	        var file = files[i];
- 	        var srcDir = publish.conf.outDir + "symbols/src/";
-	        makeSrcFile(file, srcDir);
- 	    }
-        }
-
-        var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
-    }
-*/
+    publish.classesIndex = classesTemplate.process();
 
     // hack: strip the ../../path off of the output dir
     var docUrl = publish.conf.outDir;
@@ -88,23 +76,8 @@ function publish(symbolSet) {
     }
     docUrl = docUrl.substring(docUrl.indexOf("/")+1);
 
-    try {
-        // get all files from outDir
-        var allDocFiles = IO.ls(publish.conf.outDir+"symbols/");
-        var allDocNames = [];
-        for(var i in allDocFiles) {
-            // get rid of beginning ../ and trailing .jxp
-            allDocNames.push({alias: allDocFiles[i].substring(allDocFiles[i].lastIndexOf("/")+1, allDocFiles[i].lastIndexOf("."))});
-            if(!Link.symbolSet[allDocNames[i]]) {
-                Link.symbolSet[allDocNames[i].alias] = {alias : allDocNames[i].alias, isa: "CONSTRUCTOR"};
-            }
-        }
-	var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
-    }
-    catch(e) { print(e.message); quit(); }
 
     Link.base = "../"+docUrl;
-    publish.classesIndex = classesTemplate.process(allDocNames); // kept in memory
 
     for (var i = 0, l = classes.length; i < l; i++) {
         if(classes[i] == true) continue;
@@ -116,9 +89,8 @@ function publish(symbolSet) {
     }
     // regenrate the index with different relative links
     Link.base = ""+docUrl;
-    publish.classesIndex = classesTemplate.process(allDocNames);
 
-    var classesIndex = classesindexTemplate.process(allDocNames);
+    var classesIndex = classesindexTemplate.process();
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
     classesindexTemplate = classesIndex = classes = null;
 
