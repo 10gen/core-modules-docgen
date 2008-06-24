@@ -11,7 +11,7 @@ function publish(symbolSet) {
             quit();
         }
     }
-
+    print("here");
     publish.conf = {  // trailing slash expected for dirs
 	ext: ".jxp",
 	outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
@@ -41,6 +41,7 @@ function publish(symbolSet) {
 	print(e.message);
 	quit();
     }
+    print("here2");
 
     // filters
     function hasNoParent($) {return ($.memberOf == "")}
@@ -78,7 +79,6 @@ function publish(symbolSet) {
 
 
     Link.base = "../"+docUrl;
-
     for (var i = 0, l = classes.length; i < l; i++) {
         if(classes[i] == true) continue;
 	var symbol = classes[i];
@@ -93,32 +93,6 @@ function publish(symbolSet) {
     var classesIndex = classesindexTemplate.process();
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
     classesindexTemplate = classesIndex = classes = null;
-
-    try {
-	var fileindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allfiles.tmpl");
-    }
-    catch(e) { print(e.message); quit(); }
-
-    var documentedFiles = symbols.filter(isaFile);
-    var allFiles = [];
-
-    var files = files || [];
-    for (var i = 0; i < files.length; i++) {
-	allFiles.push(new JSDOC.Symbol(files[i], [], "FILE", new JSDOC.DocComment("/** */")));
-    }
-
-    if(files.length > 0) {
-        for (var i = 0; i < documentedFiles.length; i++) {
-	    var offset = files.indexOf(documentedFiles[i].alias);
-	    allFiles[offset] = documentedFiles[i];
-        }
-    }
-
-    allFiles = allFiles.sort(makeSortby("name"));
-    var filesIndex = fileindexTemplate.process(allFiles);
-
-    IO.saveFile(publish.conf.outDir, "files"+publish.conf.ext, filesIndex);
-    fileindexTemplate = filesIndex = files = null;
 
 }
 

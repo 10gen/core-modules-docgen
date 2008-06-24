@@ -239,6 +239,47 @@
 				</if>
 			</if>
 
+
+<!-- ============================== anonymous inner classes summary ==================== -->
+
+			<if test="data.anonymous && data.anonymous.length">
+				{! var ownAnon = data.anonymous.sort(makeSortby("name")); !}
+				<if test="ownAnon.length">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the anonymous inner classes documented in the class {+data.alias+}.">
+					<caption>Anonymous Inner Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Parameters</th>
+							<th scope="col">Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					<for each="member" in="ownAnon">
+						<tr>
+							<td class="attributes">
+                                                          <if test="member.returns && member.returns.length">
+                                                            <for each="item" in="member.returns">
+					                      <b>{+item.type+}</b>&nbsp;
+                                                            </for>
+                                                          </if>
+
+                                                        </td>
+							<td class="nameDescription">
+								<div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params)+}
+								</div>
+								<div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+							</td>
+						</tr>
+					</for>
+					</tbody>
+				</table>
+				</if>
+
+			</if>
+
+
+
+
 <!-- ============================== constructor details ==================== -->
 			<if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<div class="details"><a name="constructor"> </a>
@@ -504,6 +545,9 @@
 
 			<hr />
 		</div>
+
+
+
 
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
