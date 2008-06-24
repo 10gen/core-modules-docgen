@@ -11,7 +11,7 @@ function publish(symbolSet) {
             quit();
         }
     }
-    print("here");
+
     publish.conf = {  // trailing slash expected for dirs
 	ext: ".jxp",
 	outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
@@ -36,12 +36,12 @@ function publish(symbolSet) {
 	var classTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"class.tmpl");
 	var classesTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
         var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
+        var searchTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"search.tmpl");
     }
     catch(e) {
 	print(e.message);
 	quit();
     }
-    print("here2");
 
     // filters
     function hasNoParent($) {return ($.memberOf == "")}
@@ -94,6 +94,8 @@ function publish(symbolSet) {
     IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
     classesindexTemplate = classesIndex = classes = null;
 
+    var output = searchTemplate.process();
+    IO.saveFile(publish.conf.outDir, "search"+publish.conf.ext, output);
 }
 
 

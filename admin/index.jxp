@@ -5,14 +5,15 @@ Generate documentation from files or folders.
 
 core.modules.docgen.admin.generate();
 
+var v = request.version ? request.version : '';
 if(request.action == "Do Everything") {
-    Doc.admin.all(request.d, request.version);
+    Doc.admin.all(request.d, v);
 }
 else if(request.action == "Source to DB") {
-    Doc.admin.toDB(request.version);
+    Doc.admin.toDB(v);
 }
 else if(request.action == "DB to HTML") {
-    Doc.admin.toHTML(request.d, request.version);
+    Doc.admin.toHTML(request.d, v);
 }
 else if(request.id) {
     if(request.src_type == "js")
@@ -21,10 +22,12 @@ else if(request.id) {
         db.doc.src.java.remove({_id: request.id});
 }
 else {
-    if(request.js && request.js.trim() != "")
-        db.doc.src.js.save({filename: request.js, ts: new Date(), version : request.version});
-    else if(request.java && request.java.trim() != "")
-        db.doc.src.java.save({filename: request.java, ts: new Date(), version : request.version });
+    if(request.js && request.js.trim() != ""){
+        db.doc.src.js.save({filename: request.js, ts: new Date(), version : v});
+    }
+    else if(request.java && request.java.trim() != "") {
+        db.doc.src.java.save({filename: request.java, ts: new Date(), version : v });
+    }
 }
 
 %>
@@ -32,6 +35,7 @@ else {
 <form method="POST" id="deleter">
   <input type="hidden" name="src_type" id="deleter_src_type" />
   <input type="hidden" name="id" id="deleter_id" />
+  <input type="hidden" name="version" id="<%= v %>" />
 </form>
 
 <script type="text/javascript">
@@ -60,7 +64,7 @@ This may take a while (give a couple seconds per file).
 
 <form method="POST" onsubmit="showMessage()">
   <div class="field"><legend>Write to </legend><input type="text" name="d" value="doc/" /></div>
-  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= request.version ? request.version : '' %>" /></div>
+  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /></div>
   <input type="submit" name="action" value="Do Everything" />
   <input type="submit" name="action" value="Source to DB" />
   <input type="submit" name="action" value="DB to HTML" />
@@ -72,7 +76,7 @@ This may take a while (give a couple seconds per file).
     <input type="text" name="js" />
     <input type="submit" name="addJSSrc" value="Add" />
   <%
-     var js_srcs = db.doc.src.js.find();
+     var js_srcs = db.doc.src.js.find({ version : v });
      while(js_srcs.hasNext()) {
          var z = js_srcs.next();
          %>
@@ -87,7 +91,7 @@ This may take a while (give a couple seconds per file).
     <input type="text" name="java" />
     <input type="submit" name="addJavaSrc" value="Add" />
   <%
-     var java_srcs = db.doc.src.java.find();
+var java_srcs = db.doc.src.java.find({version: v});
      while(java_srcs.hasNext()) {
          var z = java_srcs.next();
          %>

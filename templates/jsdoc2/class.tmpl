@@ -186,7 +186,9 @@
 					<tbody>
 					<for each="member" in="ownMethods">
 						<tr>
-							<td class="attributes">{!
+							<td class="attributes">
+                                                          {+member.type+}
+                                                          {!
 								if (member.isPrivate) output += "&lt;private&gt; ";
 								if (member.isInner) output += "&lt;inner&gt; ";
 								if (member.isStatic) output += "&lt;static&gt; ";
