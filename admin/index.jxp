@@ -6,13 +6,13 @@ Generate documentation from files or folders.
 core.modules.docgen.admin.generate();
 
 if(request.action == "Do Everything") {
-    Doc.admin.all(request.d);
+    Doc.admin.all(request.d, request.version);
 }
 else if(request.action == "Source to DB") {
-    Doc.admin.toDB();
+    Doc.admin.toDB(request.version);
 }
 else if(request.action == "DB to HTML") {
-    Doc.admin.toHTML(request.d);
+    Doc.admin.toHTML(request.d, request.version);
 }
 else if(request.id) {
     if(request.src_type == "js")
@@ -22,9 +22,9 @@ else if(request.id) {
 }
 else {
     if(request.js && request.js.trim() != "")
-        db.doc.src.js.save({filename: request.js, ts: new Date()});
+        db.doc.src.js.save({filename: request.js, ts: new Date(), version : request.version});
     else if(request.java && request.java.trim() != "")
-        db.doc.src.java.save({filename: request.java, ts: new Date()});
+        db.doc.src.java.save({filename: request.java, ts: new Date(), version : request.version });
 }
 
 %>
@@ -59,20 +59,18 @@ This may take a while (give a couple seconds per file).
 </div>
 
 <form method="POST" onsubmit="showMessage()">
-  <legend>Write to </legend><input type="text" name="d" value="doc/" />
+  <div class="field"><legend>Write to </legend><input type="text" name="d" value="doc/" /></div>
+  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= request.version ? request.version : '' %>" /></div>
   <input type="submit" name="action" value="Do Everything" />
   <input type="submit" name="action" value="Source to DB" />
   <input type="submit" name="action" value="DB to HTML" />
-</form>
 
 
 <h3>Sources to be included:</h3>
 <div id="js_srcs">
-  <form method="POST">
     <legend>Add JavaScript file or folder: </legend>
     <input type="text" name="js" />
     <input type="submit" name="addJSSrc" value="Add" />
-  </form>
   <%
      var js_srcs = db.doc.src.js.find();
      while(js_srcs.hasNext()) {
@@ -85,11 +83,9 @@ This may take a while (give a couple seconds per file).
 </div>
 
 <div id="java_srcs" >
-  <form method="POST">
     <legend>Add Java file or folder: </legend>
     <input type="text" name="java" />
     <input type="submit" name="addJavaSrc" value="Add" />
-  </form>
   <%
      var java_srcs = db.doc.src.java.find();
      while(java_srcs.hasNext()) {
@@ -99,5 +95,6 @@ This may take a while (give a couple seconds per file).
          <%
      }
   %>
+</form>
 
 </div>
