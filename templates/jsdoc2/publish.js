@@ -146,11 +146,13 @@ function makeSignature(params) {
 	+
     params.filter(
 	function($) {
-	    return $.name.indexOf(".") == -1; // don't show config params in signature
+            if($.name) return $.name.indexOf(".") == -1; // don't show config params in signature
+            else return true;
 	}
     ).map(
 	function($) {
-	    return $.name;
+            if($.name) return $.name;
+            else return $;
 	}
     ).join(", ")
     +

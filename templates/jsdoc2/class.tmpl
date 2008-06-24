@@ -257,10 +257,8 @@
 					<for each="member" in="ownAnon">
 						<tr>
 							<td class="attributes">
-                                                          <if test="member.returns && member.returns.length">
-                                                            <for each="item" in="member.returns">
-					                      <b>{+item.type+}</b>&nbsp;
-                                                            </for>
+                                                          <if test="member.returns">
+					                      <b>{+member.returns+}</b>&nbsp;
                                                           </if>
 
                                                         </td>
@@ -547,6 +545,104 @@
 		</div>
 
 
+
+
+<!-- ============================== anonymous inner classes details ========================= -->
+			<if test="defined(ownAnon) && ownAnon.length">
+				<div class="sectionTitle">
+					Anonymous Inner Classes Detail
+				</div>
+				<for each="member" in="ownAnon">
+					<a name="{+Link.symbolNameToLinkName(member)+}"> </a>
+					<div class="fixedFont">
+
+					<if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
+					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name || member._name+}</b>{+makeSignature(member.params)+}
+                                        <if test="member.returns">
+					    <b>{+member.returns+}</b>
+                                        </if>
+
+					</div>
+					<div class="description">
+						{+resolveLinks(member.desc)+}
+						<if test="member.srcFile != data.srcFile">
+							<br />
+							<i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.
+						</if>
+						<if test="member.author"><br /><i>Author: </i>{+member.author+}.</if>
+					</div>
+
+					<if test="member.example && member.example.length">
+					<for each="example" in="member.example">
+					<pre class="code">{+example+}</pre>
+					</for>
+					</if>
+
+						<if test="defined(member.params) && member.params.length">
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							<for each="item" in="member.params">
+								<dt>
+									<b>{+item+}</b>
+								</dt>
+							</for>
+							</dl>
+						</if>
+						<if test="member.deprecated">
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								{+member.deprecated+}
+							</dt>
+							</dl>
+						</if>
+						<if test="member.since">
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>{+ member.since +}</dd>
+							</dl>
+							</dl>
+						</if>
+						<if test="member.exceptions && member.exceptions.length">
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							<for each="item" in="member.exceptions">
+								<dt>
+									{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
+								</dt>
+								<dd>{+resolveLinks(item.desc)+}</dd>
+							</for>
+							</dl>
+						</if>
+						<if test="member.returns">
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							<dd>{+resolveLinks(member.returns)+}</dd>
+							</dl>
+						</if>
+						<if test="member.requires && member.requires.length">
+							<dl class="detailList">
+							<dt class="heading">Requires:</dt>
+							<for each="item" in="member.requires">
+								<dd>{+ resolveLinks(item) +}</dd>
+							</for>
+							</dl>
+						</if>
+						<if test="member.see && member.see.length">
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							<for each="item" in="member.see">
+								<dd>{+ new Link().toSymbol(item) +}</dd>
+							</for>
+							</dl>
+						</if>
+
+					<if test="!$member_last"><hr /></if>
+				</for>
+			</if>
+
+			<hr />
+		</div>
 
 
 <!-- ============================== footer ================================= -->
