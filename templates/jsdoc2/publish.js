@@ -16,9 +16,9 @@ function publish(symbolSet) {
 	ext: ".jxp",
 	outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
 	templatesDir: SYS.pwd+"../templates/jsdoc2/",
-        symbolsDirName : "symbols/"
+        symbolsDirName : "", //"symbols/"
     };
-    publish.conf.symbolsDir = publish.conf.outDir+"/symbols/";
+    publish.conf.symbolsDir = publish.conf.outDir;//+"/symbols/";
 
     if (JSDOC.opt.s && defined(Link) && Link.prototype._makeSrcLink) {
 	Link.prototype._makeSrcLink = function(srcFilePath) {
@@ -85,17 +85,23 @@ function publish(symbolSet) {
 	var output = "";
 	output = classTemplate.process(symbol);
 
-	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
+//	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
+	IO.saveFile(publish.conf.outDir, symbol.alias+publish.conf.ext, output);
     }
     // regenrate the index with different relative links
     Link.base = ""+docUrl;
 
-    var classesIndex = classesindexTemplate.process();
-    IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
-    classesindexTemplate = classesIndex = classes = null;
+    // publish.js will be run every time a db obj is rendered.  Some pages don't need to be rerendered every time
+    if(!IO.exists(publish.conf.outDir+"index"+publish.conf.ext)) {
+        var classesIndex = classesindexTemplate.process();
+        IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
+        classesindexTemplate = classesIndex = classes = null;
 
-    var output = searchTemplate.process();
-    IO.saveFile(publish.conf.outDir, "search"+publish.conf.ext, output);
+        var output = searchTemplate.process();
+        IO.saveFile(publish.conf.outDir, "search"+publish.conf.ext, output);
+
+        IO.saveFile(publish.conf.outDir, "default.css", IO.readFile(publish.conf.templatesDir+"static/default.css"));
+    }
 }
 
 
