@@ -2,7 +2,7 @@ IO.include("../templates/json/json2.js");
 // move to www
 
 function publish(symbolSet) {
-    if(!symbolSet.fromJava) {
+/*    if(!symbolSet.fromJava) {
         try {
             symbolSet = eval("("+symbolSet+")");
         }
@@ -11,6 +11,7 @@ function publish(symbolSet) {
             quit();
         }
     }
+*/
 
     publish.conf = {  // trailing slash expected for dirs
 	ext: ".jxp",

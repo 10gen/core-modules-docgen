@@ -28,9 +28,9 @@
                      <%
                      while(cursor.hasNext()) {
                          var obj = cursor.next();
-                         for(var i in obj) {
+                         for(var i in obj.name) {
                              %>
-                             <div class="searchresult"><a href="symbols/<%= obj[i] %>"><%= obj[i] %></a></div>
+                             <div class="searchresult"><a href="<%= obj.name[i] %>"><%= obj.name[i] %></a></div>
                              <%
                          }
                      }
