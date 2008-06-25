@@ -27,8 +27,6 @@ function publish(symbolSet) {
     }
     if( !JSDOC.opt.D ) JSDOC.opt.D = {};
 
-    IO.mkPath((publish.conf.outDir+"symbols").split("/"));
-
     // used to check the details of things being linked to
     Link.symbolSet = symbolSet;
 
@@ -85,7 +83,6 @@ function publish(symbolSet) {
 	var output = "";
 	output = classTemplate.process(symbol);
 
-//	IO.saveFile(publish.conf.outDir+"symbols/", symbol.alias+publish.conf.ext, output);
 	IO.saveFile(publish.conf.outDir, symbol.alias+publish.conf.ext, output);
     }
     // regenrate the index with different relative links
@@ -100,7 +97,8 @@ function publish(symbolSet) {
         var output = searchTemplate.process();
         IO.saveFile(publish.conf.outDir, "search"+publish.conf.ext, output);
 
-        IO.saveFile(publish.conf.outDir, "default.css", IO.readFile(publish.conf.templatesDir+"static/default.css"));
+        IO.mkPath((publish.conf.outDir+"assets").split("/"));
+        IO.saveFile(publish.conf.outDir+"assets/", "default.css", IO.readFile(publish.conf.templatesDir+"static/default.css"));
     }
 }
 

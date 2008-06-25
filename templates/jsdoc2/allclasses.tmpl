@@ -6,20 +6,20 @@
   var url = request.getURI();
   url = url.substring(0, url.lastIndexOf("/"));
 
-  var symbols = true;
-  if(url.indexOf("symbols") > 0) {
-      symbols = false;
-  }
-
   core.core.file();
 
-  var dir = openFile(url+(symbols ? "/symbols" : ""));
+  var ignore = ["search.jxp", "DOC_DIR", "index.jxp", "assets"];
+  var dir = openFile(url);
   if(dir.exists() && dir.isDirectory()) {
       var f = dir.listFiles();
       for(var i in f) {
-          %>
-          <li><a href="<%= url + (symbols ? "/symbols/" : "/") + f[i].filename %>"><%= f[i].filename.substring(0, f[i].filename.lastIndexOf(".")) %></a></li>
-          <%
+          if(!ignore.contains(f[i].filename)) {
+              %>
+              <div>
+                <h2><a href="<%= f[i].filename %>"><%= f[i].filename.substring(0, f[i].filename.lastIndexOf(".")) %></a></h2>
+	      </div>
+              <%
+          }
       }
   }
   %>
