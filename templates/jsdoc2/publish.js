@@ -1,17 +1,6 @@
 IO.include("../templates/json/json2.js");
-// move to www
 
 function publish(symbolSet) {
-/*    if(!symbolSet.fromJava) {
-        try {
-            symbolSet = eval("("+symbolSet+")");
-        }
-        catch(e) {
-            print("error eval-ing symbolSet: "+symbolSet);
-            quit();
-        }
-    }
-*/
 
     publish.conf = {  // trailing slash expected for dirs
 	ext: ".jxp",
