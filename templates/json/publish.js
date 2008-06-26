@@ -1,8 +1,17 @@
 IO.include("../templates/json/json2.js");
 
 function publish(symbolSet) {
-    print(JSON.stringify(removeJunk(symbolSet._index)));
+//    print(JSON.stringify(removeJunk(symbolSet._index)));
+    print(divvyUp(removeJunk(symbolSet._index)));
 }
+function divvyUp(ss) {
+    var arr = [];
+    for(var cls in ss) {
+        arr.push("{\""+cls+"\":"+JSON.stringify(ss[cls])+"}");
+    }
+    return arr.join("---=---");
+}
+
 
 function removeJunk(ss) {
     for(var cls in ss) {

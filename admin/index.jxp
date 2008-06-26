@@ -21,7 +21,7 @@ else if(request.id) {
     else if(request.src_type == "java")
         db.doc.src.java.remove({_id: request.id});
 }
-else {
+else if (request.action != "Switch To") {
     if(request.js && request.js.trim() != ""){
         db.doc.src.js.save({filename: request.js, ts: new Date(), version : v});
     }
@@ -64,7 +64,7 @@ This may take a while (give a couple seconds per file).
 
 <form method="POST" onsubmit="showMessage()">
   <div class="field"><legend>Write to </legend><input type="text" name="d" value="doc/" /></div>
-  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /></div>
+  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /><input type="submit" name="action" value="Switch To" /></div>
   <input type="submit" name="action" value="Do Everything" />
   <input type="submit" name="action" value="Source to DB" />
   <input type="submit" name="action" value="DB to HTML" />
