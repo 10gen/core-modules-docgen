@@ -18,11 +18,13 @@ function removeJunk(ss) {
         if(ss[cls]["$args"])
             delete ss[cls]["$args"];
         ss[cls].comment = {};
+        ss[cls].params = ss[cls]._params;
         for(var m in ss[cls].methods) {
             if(ss[cls].methods[m]["$args"]) {
                 delete ss[cls].methods[m]["$args"];
             }
             ss[cls].methods[m].comment = {};
+            ss[cls].methods[m].params = ss[cls].methods[m]._params;
         }
         for(var p in ss[cls].properties) {
             if(ss[cls].properties[p]["$args"])
