@@ -147,8 +147,9 @@ function makeSignature(params) {
 	}
     ).map(
 	function($) {
-            if($.name) return $.name;
-            else return $;
+            var type = ($.type ? $.type+" " : "");
+            if($.name) return type+$.name;
+            else return type+$;
 	}
     ).join(", ")
     +
