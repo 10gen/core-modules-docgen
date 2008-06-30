@@ -83,40 +83,56 @@ Link.symbolNameToLinkName = function(symbol) {
 
 /** Create a link to a snother symbol. */
 Link.prototype._makeSymbolLink = function(alias) {
-	var linkBase = Link.base+publish.conf.symbolsDirName;
-	var linkTo = Link.symbolSet.getSymbol(alias);
-	var linkPath;
-	var target = (this.targetName)? " target=\""+this.targetName+"\"" : "";
+    var linkBase = publish.conf.symbolsDirName;
+    var linkTo = Link.symbolSet.getSymbol(alias);
+    if(!linkTo) {
+        var linkTypes = ["methods", "properties"];
+        for(var z in linkTypes) {
+            for(var i in Link.symbolSet) {
+                for(var j in Link.symbolSet[i][linkTypes[z]]) {
+                    if(Link.symbolSet[i][linkTypes[z]][j].name == alias) {
+                        if(Link.symbolSet[i][linkTypes[z]][j].isStatic) alias = "."+alias;
+                        else if(Link.symbolSet[i][linkTypes[z]][j].isInner) alias = "-"+alias;
+                        alias = "#"+alias;
+                        linkTo = Link.symbolSet[i][linkTypes[z]][j];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    var linkPath;
+    var target = (this.targetName)? " target=\""+this.targetName+"\"" : "";
 
-	// is it an internal link?
-	if (alias.charAt(0) == "#") var linkPath = alias;
+    // is it an internal link?
+    if (alias.charAt(0) == "#") var linkPath = alias;
 
-	// if there is no symbol by that name just return the name unaltered
-	else if (!linkTo) return this.text || alias;
+    // if there is no symbol by that name just return the name unaltered
+    else if (!linkTo) return this.text || alias;
 
-	// it's a symbol in another file
+    // it's a symbol in another file
+    else {
+
+	if ((!linkTo.isa == "CONSTRUCTOR" || (linkTo.is && !linkTo.is("CONSTRUCTOR"))) && !linkTo.isNamespace) { // it's a method or property
+	    linkPath = escape(linkTo.memberOf) || "_global_";
+	    linkPath += publish.conf.ext + "#" + Link.symbolNameToLinkName(linkTo);
+	}
 	else {
-
-	    if ((!linkTo.isa == "CONSTRUCTOR" || (linkTo.is && !linkTo.is("CONSTRUCTOR"))) && !linkTo.isNamespace) { // it's a method or property
-			linkPath = escape(linkTo.memberOf) || "_global_";
-			linkPath += publish.conf.ext + "#" + Link.symbolNameToLinkName(linkTo);
-		}
-		else {
-			linkPath = escape(linkTo.alias);
-			linkPath += publish.conf.ext + (this.classLink? "":"#" + Link.hashPrefix + "constructor");
-		}
-		linkPath = linkBase + linkPath
+	    linkPath = escape(linkTo.alias);
+	    linkPath += publish.conf.ext + (this.classLink? "":"#" + Link.hashPrefix + "constructor");
 	}
+	linkPath = linkBase + linkPath
+    }
 
-	var linkText = this.text || alias;
+    var linkText = this.text || alias;
 
-	var link = {linkPath: linkPath, linkText: linkText};
+    var link = {linkPath: linkPath, linkText: linkText};
 
-	if (typeof JSDOC.PluginManager != "undefined") {
-		JSDOC.PluginManager.run("onSymbolLink", link);
-	}
+    if (typeof JSDOC.PluginManager != "undefined") {
+	JSDOC.PluginManager.run("onSymbolLink", link);
+    }
 
-	return "<a href=\""+link.linkPath+"\""+target+">"+link.linkText+"</a>";
+    return "<a href=\""+link.linkPath+"\""+target+">"+link.linkText+"</a>";
 }
 
 /** Create a link to a source file. */

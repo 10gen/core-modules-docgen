@@ -66,7 +66,7 @@ function publish(symbolSet) {
     docUrl = docUrl.substring(docUrl.indexOf("/")+1);
 
 
-    Link.base = "../"+docUrl;
+//    Link.base = "../"+docUrl;
     for (var i = 0, l = classes.length; i < l; i++) {
         if(classes[i] == true) continue;
 	var symbol = classes[i];
