@@ -3,22 +3,27 @@ Generate documentation from files or folders.
 
 <%
 
-core.modules.docgen.admin.generate();
+var everything = "Do Everything";
+var toHTML = "DB to HTML";
+var toDB = "Source to DB";
+var switchVersion = "Switch To";
 
 var v = request.version ? request.version : '';
-if(request.action == "Do Everything") {
+var generatedHTML = (request.action == everything || request.action == toHTML);
+
+if(request.action == everything) {
     Doc.admin.all(request.d, v);
 }
-else if(request.action == "Source to DB") {
+else if(request.action == toDB) {
     Doc.admin.toDB(v);
 }
-else if(request.action == "DB to HTML") {
+else if(request.action == toHTML) {
     Doc.admin.toHTML(request.d, v);
 }
 else if(request.id) {
    db.doc.src.remove({_id: request.id});
 }
-else if (request.action != "Switch To") {
+else if (request.action != switchVersion) {
     if(request.src && request.src.trim() != ""){
         db.doc.src.save({filename: request.src, ts: new Date(), version : v});
     }
@@ -27,7 +32,6 @@ else if (request.action != "Switch To") {
 %>
 
 <form method="POST" id="deleter">
-  <input type="hidden" name="src_type" id="deleter_src_type" />
   <input type="hidden" name="id" id="deleter_id" />
   <input type="hidden" name="version" id="<%= v %>" />
 </form>
@@ -52,11 +56,18 @@ This may take a while (give a couple seconds per file).
 
 <form method="POST" onsubmit="showMessage()">
   <div class="field"><legend>Write to </legend><input type="text" name="d" value="doc/" /></div>
-  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /><input type="submit" name="action" value="Switch To" /></div>
-  <input type="submit" name="action" value="Do Everything" />
-  <input type="submit" name="action" value="Source to DB" />
-  <input type="submit" name="action" value="DB to HTML" />
+  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /><input type="submit" name="action" value="<%= switchVersion %>" /></div>
+  <input type="submit" name="action" value="<%= everything %>" />
+  <input type="submit" name="action" value="<%= toDB %>" />
+  <input type="submit" name="action" value="<%= toHTML %>" />
 
+<%
+if(generatedHTML) {
+   %>
+   <a href="../../<%= request.d %>">Documentation</a>
+   <%
+}
+%>
 
 <h3>Sources to be included:</h3>
 <div id="srcs">
