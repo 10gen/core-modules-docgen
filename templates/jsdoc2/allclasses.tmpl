@@ -1,3 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="content-type" content="text/html; charset={+IO.encoding+}" />
+<meta name="generator" content="JsDoc Toolkit" />{! Link.base = "../"; /* all generated links will be relative to this */ !}<title>JsDoc Reference</title>
+<link rel="stylesheet" href="assets/default.css" />
+</head>
+<body>
+<!-- ============================== header ================================= -->
+{+include("static/header.html")+}
+<!-- ============================== classes index ============================ -->
+
 <div align="center">{+new Link().toFile("index").withText("Class Index")+}</div>
 <hr />
 <h2>Classes</h2>
@@ -25,3 +36,14 @@
   %>
 </ul>
 <hr />
+
+
+<%
+url = request.getURI();
+url = url.substring(url.lastIndexOf("/"));
+openFile(url+".out");
+%>
+
+
+</body>
+</html>

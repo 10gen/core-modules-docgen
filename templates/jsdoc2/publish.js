@@ -3,7 +3,7 @@ IO.include("../templates/json/json2.js");
 function publish(symbolSet) {
 
     publish.conf = {  // trailing slash expected for dirs
-	ext: ".jxp",
+	ext: ".out",
 	outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
 	templatesDir: SYS.pwd+"../templates/jsdoc2/",
         symbolsDirName : "", //"symbols/"
@@ -77,13 +77,13 @@ function publish(symbolSet) {
     Link.base = ""+docUrl;
 
     // publish.js will be run every time a db obj is rendered.  Some pages don't need to be rerendered every time
-    if(!IO.exists(publish.conf.outDir+"index"+publish.conf.ext)) {
+    if(!IO.exists(publish.conf.outDir+"index.jxp")) {
         var classesIndex = classesindexTemplate.process();
-        IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
+        IO.saveFile(publish.conf.outDir, "index.jxp", classesIndex);
         classesindexTemplate = classesIndex = classes = null;
 
         var output = searchTemplate.process();
-        IO.saveFile(publish.conf.outDir, "search"+publish.conf.ext, output);
+        IO.saveFile(publish.conf.outDir, "search.jxp", output);
 
         IO.mkPath((publish.conf.outDir+"assets").split("/"));
         IO.saveFile(publish.conf.outDir+"assets/", "default.css", IO.readFile(publish.conf.templatesDir+"static/default.css"));
