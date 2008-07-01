@@ -10,16 +10,10 @@ Doc.admin.toDB = function(version) {
     db.doc.remove({version : version});
 
     // restock
-    var js = db.doc.src.js.find({version : version});
-    while(js.hasNext()) {
-        var z = js.next();
-        Util.Doc.JSToDb(z.filename);
-    }
-
-    var java = db.doc.src.java.find({version : version});
-    while(java.hasNext()) {
-        var z = java.next();
-        Util.Doc.JavadocToDb(z.filename);
+    var src = db.doc.src.find({version : version});
+    while(src.hasNext()) {
+        var z = src.next();
+        Util.Doc.SrcToDb(z.filename);
     }
 }
 

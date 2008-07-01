@@ -40,8 +40,6 @@ function publish(symbolSet) {
         var classes = [];
         var symbols = [];
         for(var i in symbolSet) {
-            if(i == "fromJava") continue;
-
             // add some functions to the obj
             symbolSet[i].isBuiltin = function() { return false; };
             symbolSet[i].is = function(str) { return this.isa == str; };

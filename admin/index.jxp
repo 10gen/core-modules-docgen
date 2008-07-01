@@ -16,19 +16,11 @@ else if(request.action == "DB to HTML") {
     Doc.admin.toHTML(request.d, v);
 }
 else if(request.id) {
-    if(request.src_type == "js") {
-        db.doc.src.js.remove({_id: request.id});
-    }
-    else if(request.src_type == "java") {
-        db.doc.src.java.remove({_id: request.id});
-    }
+   db.doc.src.remove({_id: request.id});
 }
 else if (request.action != "Switch To") {
-    if(request.js && request.js.trim() != ""){
-        db.doc.src.js.save({filename: request.js, ts: new Date(), version : v});
-    }
-    else if(request.java && request.java.trim() != "") {
-        db.doc.src.java.save({filename: request.java, ts: new Date(), version : v });
+    if(request.src && request.src.trim() != ""){
+        db.doc.src.save({filename: request.src, ts: new Date(), version : v});
     }
 }
 
@@ -42,14 +34,8 @@ else if (request.action != "Switch To") {
 
 <script type="text/javascript">
 
-function deleteJSSrc(id) {
+function deleteSrc(id) {
     document.getElementById("deleter_id").value = id;
-    document.getElementById("deleter_src_type").value = "js";
-    document.getElementById("deleter").submit();
-}
-function deleteJavaSrc(id) {
-    document.getElementById("deleter_id").value = id;
-    document.getElementById("deleter_src_type").value = "java";
     document.getElementById("deleter").submit();
 }
 
@@ -73,34 +59,20 @@ This may take a while (give a couple seconds per file).
 
 
 <h3>Sources to be included:</h3>
-<div id="js_srcs">
+<div id="srcs">
     <legend>Add JavaScript file or folder: </legend>
-    <input type="text" name="js" />
-    <input type="submit" name="addJSSrc" value="Add" />
+    <input type="text" name="src" />
+    <input type="submit" name="addSrc" value="Add" />
   <%
-     var js_srcs = db.doc.src.js.find({ version : v });
-     while(js_srcs.hasNext()) {
-         var z = js_srcs.next();
+     var srcs = db.doc.src.find({ version : v });
+     while(srcs.hasNext()) {
+         var z = srcs.next();
          %>
-         <div class="src"><input type="button" value="delete" onclick="deleteJSSrc('<%= z._id %>')" /><%= z.filename %></div>
+         <div class="src"><input type="button" value="delete" onclick="deleteSrc('<%= z._id %>')" /><%= z.filename %></div>
          <%
      }
   %>
 </div>
-
-<div id="java_srcs" >
-    <legend>Add Java file or folder: </legend>
-    <input type="text" name="java" />
-    <input type="submit" name="addJavaSrc" value="Add" />
-  <%
-var java_srcs = db.doc.src.java.find({version: v});
-     while(java_srcs.hasNext()) {
-         var z = java_srcs.next();
-         %>
-         <div class="src"><input type="button" value="delete" onclick="deleteJavaSrc('<%= z._id %>')" /><%= z.filename %></div>
-         <%
-     }
-  %>
 </form>
 
 </div>
