@@ -23,4 +23,4 @@ Doc.getRoutes = function() {
  */
 core.core.routes();
 Doc.routes = new Routes();
-//Doc.routes.setDefault("/~~/modules/docgen/index.jxp");
+Doc.routes.add( /[^\.]+/ , "/~~/modules/docgen/apidocs/index.jxp" ); 
