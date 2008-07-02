@@ -85,14 +85,13 @@ Link.symbolNameToLinkName = function(symbol) {
 Link.prototype._makeSymbolLink = function(alias) {
     var linkBase = publish.conf.symbolsDirName;
     var linkTo = Link.symbolSet.getSymbol(alias);
-//    if(alias.indexOf("#") > 0) alias = alias.substring(alias.indexOf("#")+1);
     if(!linkTo) {
         var linkTypes = ["methods", "properties"];
         for(var z in linkTypes) {
             for(var i in Link.symbolSet) {
                 for(var j in Link.symbolSet[i][linkTypes[z]]) {
                     if(Link.symbolSet[i][linkTypes[z]][j].name == alias) {
-                        if(Link.symbolSet[i][linkTypes[z]][j].isStatic) alias = "."+alias;
+                        if(Link.symbolSet[i][linkTypes[z]][j].isStatic) alias = "."+alias.substring(alias.lastIndexOf(".")+1);
                         else if(Link.symbolSet[i][linkTypes[z]][j].isInner) alias = "-"+alias;
                         alias = "#"+alias;
                         linkTo = Link.symbolSet[i][linkTypes[z]][j];
@@ -100,7 +99,7 @@ Link.prototype._makeSymbolLink = function(alias) {
                     }
                     else if(Link.symbolSet[i][linkTypes[z]][j].alias == alias) {
                         alias = alias.substring(alias.indexOf("#")+1);
-                        if(Link.symbolSet[i][linkTypes[z]][j].isStatic) alias = "."+alias;
+                        if(Link.symbolSet[i][linkTypes[z]][j].isStatic) alias = "."+alias.substring(alias.lastIndexOf(".")+1);
                         else if(Link.symbolSet[i][linkTypes[z]][j].isInner) alias = "-"+alias;
                         alias = "#"+alias;
                         linkTo = Link.symbolSet[i][linkTypes[z]][j];
