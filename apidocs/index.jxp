@@ -25,7 +25,7 @@
   var cursor = db.doc.html.find();
 
   cursor.forEach( function(blob) {
-  var name = blob.name.substring(0, blob.name.indexOf(".out"));
+  var name = blob.name;
   
   %>
       <div>
@@ -64,7 +64,7 @@ else {
 <%
 function renderBody(classname) {
     if (classname != null) { 
-        classname = classname.substring(1) + ".out";
+        classname = classname.substring(1);
     }
 %> 
      <h1 class="classTitle">Class Information</h1>
