@@ -67,7 +67,7 @@ This may take a while (give a couple seconds per file).
 <%
 if(generatedHTML) {
    %>
-   <a href="../../<%= request.d %>">Documentation</a>
+   <a href="../../<%= request.d %>" target="_blank">Documentation</a>
    <%
 }
 %>

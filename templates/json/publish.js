@@ -1,9 +1,10 @@
 IO.include("../templates/json/json2.js");
 
 function publish(symbolSet) {
-//    print(JSON.stringify(removeJunk(symbolSet._index)));
     print(divvyUp(removeJunk(symbolSet._index)));
+//    IO.saveFile("/home/k/", "cleanOutput", JSON.stringify(removeJunk(symbolSet._index), null, 4));
 }
+
 function divvyUp(ss) {
     var arr = [];
     for(var cls in ss) {
