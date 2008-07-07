@@ -36,23 +36,20 @@ function publish(symbolSet) {
     function isaFile($) { return ($.is("FILE"))}
     function isaClass($) { return ($.is("CONSTRUCTOR") || $.isNamespace)}
 
-    if(true) {
-        var classes = [];
-        var symbols = [];
-        for(var i in symbolSet) {
-            // add some functions to the obj
-            symbolSet[i].isBuiltin = function() { return false; };
-            symbolSet[i].is = function(str) { return this.isa == str; };
-            symbolSet[i].comment.getTag = function(str) { return []; };
-            if (!symbolSet[i].params) symbolSet[i].params = [];
+    var classes = [];
+    var symbols = [];
+    for(var i in symbolSet) {
+        // add some functions to the obj
+        symbolSet[i].isBuiltin = function() { return false; };
+        symbolSet[i].is = function(str) { return this.isa == str; };
+        symbolSet[i].comment.getTag = function(str) { return []; };
+        if (!symbolSet[i].params) symbolSet[i].params = [];
 
-            // add to the collection of symbols and maybe the class collection
-            symbols.push(symbolSet[i]);
-            if(symbolSet[i].isa == "CONSTRUCTOR") classes.push(symbolSet[i]);
+        // add to the collection of symbols and maybe the class collection
+        symbols.push(symbolSet[i]);
+        if(symbolSet[i].isa == "CONSTRUCTOR" || symbolSet[i].isNamespace) classes.push(symbolSet[i]);
         }
-        symbolSet.getSymbol = function(str) { return symbolSet[str]; };
-
-    }
+    symbolSet.getSymbol = function(str) { return symbolSet[str]; };
 
     publish.classesIndex = classesTemplate.process();
 

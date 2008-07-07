@@ -31,9 +31,11 @@ else if (request.action != switchVersion) {
 
 %>
 
+<div>Version <%= v %></div>
+
 <form method="POST" id="deleter">
   <input type="hidden" name="id" id="deleter_id" />
-  <input type="hidden" name="version" id="<%= v %>" />
+  <input type="hidden" name="version" value="<%= v %>" />
 </form>
 
 <script type="text/javascript">
@@ -60,20 +62,25 @@ This may take a while (give a couple seconds per file).
   <input type="submit" name="action" value="<%= everything %>" />
   <input type="submit" name="action" value="<%= toDB %>" />
   <input type="submit" name="action" value="<%= toHTML %>" />
+</form>
 
 <%
 if(generatedHTML) {
    %>
-   <a href="../../<%= request.d %>">Documentation</a>
+   <a href="../../<%= request.d %>" target="_blank">Documentation</a>
    <%
 }
 %>
 
 <h3>Sources to be included:</h3>
+<form method="POST">
+  <input type="hidden" name="version" value="<%= v %>" />
+  <legend>Add JavaScript file or folder: </legend>
+  <input type="text" name="src" />
+  <input type="submit" name="addSrc" value="Add" />
+</form>
+
 <div id="srcs">
-    <legend>Add JavaScript file or folder: </legend>
-    <input type="text" name="src" />
-    <input type="submit" name="addSrc" value="Add" />
   <%
      var srcs = db.doc.src.find({ version : v });
      while(srcs.hasNext()) {
@@ -84,6 +91,5 @@ if(generatedHTML) {
      }
   %>
 </div>
-</form>
 
 </div>
