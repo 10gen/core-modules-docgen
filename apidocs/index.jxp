@@ -96,7 +96,7 @@ function renderIndex() {
      <h1 class="classTitle">Class Index</h1>
 
   <%
-  var cursor = db.doc.html.find()sort({name:1});;
+  var cursor = db.doc.html.find().sort({name:1});
   cursor.forEach( function(blob) { 
   %>
       <div>
