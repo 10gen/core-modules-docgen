@@ -22,7 +22,7 @@
 <h2>Classes</h2>
 <ul class="classList">
   <%
-  var cursor = db.doc.html.find();
+  var cursor = db.doc.html.find().sort({name:1});
 
   cursor.forEach( function(blob) {
   var name = blob.name;
