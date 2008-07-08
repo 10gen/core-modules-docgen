@@ -152,6 +152,10 @@ function makeSignature(params) {
     return signature;
 }
 
+function isConstructor(data) {
+    return (data.isa == "CONSTRUCTOR");
+}
+
 /** Find symbol {@link ...} strings in text and turn into html links */
 function resolveLinks(str, from) {
     if(!str) str = "";

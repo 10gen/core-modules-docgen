@@ -31,7 +31,7 @@ else {
 </h1>
 <!-- ============================== class summary ========================== --><p class="description"><if test="data.augments.length"><br />Extends {+data.augments.sort().map(function($) { return new Link().toSymbol($); }).join(", ")+}.<br /></if>{+resolveLinks(data.classDesc)+}<if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.</if></p>
 <!-- ============================== constructor summary ==================== -->
-<if test="data.constructors && data.constructors.length">
+<if test="data.constructors && data.constructors.length || data._params && data._params.length">
   {! var ownConstructors = data.constructors; !}
   <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">
     <caption>{+classType+}Summary</caption>
@@ -42,14 +42,24 @@ else {
       </tr>
     </thead>
     <tbody>
-      <for each="member" in="ownConstructors">
+      <if test="data._params && data._params.length">
         <tr>
-          <td class="attributes">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; !}&nbsp;</td>
+          <td class="attributes">{! if (data.isPrivate) output += "&lt;private&gt; "; if (data.isInner) output += "&lt;inner&gt; "; !}&nbsp;</td>
           <td class="nameDescription" >
-            <div class="fixedFont"><b>{+ new Link().toSymbol(member.name).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(member.params || member._params) +}</if></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+            <div class="fixedFont"><b>{+ new Link().toSymbol(data._name).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(data._params) +}</if></div><div class="description">{+resolveLinks(summarize(data.desc))+}</div>
           </td>
         </tr>
-      </for>
+      </if>
+      <if test="ownConstructors">
+        <for each="member" in="ownConstructors">
+          <tr>
+            <td class="attributes">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; !}&nbsp;</td>
+            <td class="nameDescription" >
+              <div class="fixedFont"><b>{+ new Link().toSymbol(member.name).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(member.params || member._params) +}</if></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+            </td>
+          </tr>
+        </for>
+      </if>
     </tbody>
   </table>
 </if>
