@@ -11,7 +11,7 @@
   <body>
     <div id="header">
 <form action="./search" method="POST" />
-<input type="text" name="search" /><input type="submit" value="Search" />
+<input type="text" name="search" /><input type="submit" name="action" value="Search" />
 </form>
 </div>
 
@@ -48,6 +48,9 @@
 
 if (classname == "/") {
     renderIndex();
+}
+else if (request.action == "search") {
+    renderSearch();
 }
 else { 
     renderBody(classname);
@@ -106,5 +109,23 @@ function renderIndex() {
   });
   %>    
 <%
+}
+
+function renderSearch() {
+%>
+                  <h1>Search</h1>
+                  <%
+                     var q = new RegExp(request.search, "i");
+                     var cursor = db.doc.find({"name": q});
+                     %>
+                  <h2><%= cursor.count() %> Results</h2>
+                     <%
+                     while(cursor.hasNext()) {
+                         var obj = cursor.next();
+                             %>
+                             <div class="searchresult"><a href="<%= obj.name %>"><%= obj.name %></a></div>
+                             <%
+                     }
+
 }
 %>
