@@ -10,32 +10,32 @@
 
   <body>
     <div id="header">
-<form action="./search" method="POST" />
-<input type="text" name="search" /><input type="submit" name="action" value="Search" />
-</form>
-</div>
+      <form action="./search" method="POST">
+        <input type="text" name="search" /><input type="submit" name="action" value="Search" />
+      </form>
+    </div>
 
 
     <div id="index">
-      <div align="center"><a href="">Class Index</a></div>
-<hr />
-<h2>Classes</h2>
-<ul class="classList">
-  <%
-  var cursor = db.doc.html.find().sort({name:1});
+      <div align="center"><a href="./">Class Index</a></div>
+      <hr />
+      <h2>Classes</h2>
+      <ul class="classList">
+      <%
+        var cursor = db.doc.html.find().sort({name:1});
 
-  cursor.forEach( function(blob) {
-  var name = blob.name;
+        cursor.forEach( function(blob) {
+            var name = blob.name;
 
-  %>
-      <div>
-        <h2><a href="<%= name %>"><%= name %></a></h2>
-      </div>
-  <%
-  });
-  %>
-</ul>
-<hr />
+           %>
+           <div>
+             <h2><a href="<%= name %>"><%= name %></a></h2>
+           </div>
+           <%
+        });
+      %>
+      </ul>
+      <hr />
 
     </div>
 

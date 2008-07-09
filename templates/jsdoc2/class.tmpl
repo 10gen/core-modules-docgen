@@ -29,7 +29,15 @@ else {
 }
 !} {+classType+}{+data.alias+}
 </h1>
-<!-- ============================== class summary ========================== --><p class="description"><if test="data.augments.length"><br />Extends {+data.augments.sort().map(function($) { return new Link().toSymbol($); }).join(", ")+}.<br /></if>{+resolveLinks(data.classDesc)+}<if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.</if></p>
+<!-- ============================== class summary ========================== -->
+<p class="description">
+  {+data.desc+}
+  <if test="data.augments.length">
+    <br />Extends {+data.augments.sort().map(function($) { return new Link().toSymbol($); }).join(", ")+}.<br />
+  </if>
+  {+resolveLinks(data.classDesc)+}
+  <if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.</if>
+</p>
 <!-- ============================== constructor summary ==================== -->
 <if test="data.constructors && data.constructors.length || data._params && data._params.length">
   {! var ownConstructors = data.constructors; !}
