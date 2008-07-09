@@ -26,14 +26,14 @@
 
   cursor.forEach( function(blob) {
   var name = blob.name;
-  
+
   %>
       <div>
         <h2><a href="<%= name %>"><%= name %></a></h2>
       </div>
   <%
   });
-  %>    
+  %>
 </ul>
 <hr />
 
@@ -49,34 +49,34 @@
 if (classname == "/") {
     renderIndex();
 }
-else if (request.action == "search") {
+else if (request.action == "Search") {
     renderSearch();
 }
-else { 
+else {
     renderBody(classname);
-} 
+}
 %>
- 
+
     </div>
     <div class="fineprint" style="clear:both">
-      
+
       Documentation (c) 2008 10gen Inc.    </div>
   </body>
 </html>
 
 <%
 function renderBody(classname) {
-    if (classname != null) { 
+    if (classname != null) {
         classname = classname.substring(1);
     }
-%> 
+%>
      <h1 class="classTitle">Class Information</h1>
 
   <%
   var blob = db.doc.html.findOne({name:classname});
 
-  if(blob == null) { 
-    %> 
+  if(blob == null) {
+    %>
     Classname <%= classname %> not Found
     <%
    }
@@ -87,7 +87,7 @@ function renderBody(classname) {
       </div>
   <%
   }
-  %>    
+  %>
 <%
 }
 %>
@@ -95,19 +95,19 @@ function renderBody(classname) {
 
 <%
 function renderIndex() {
-%> 
+%>
      <h1 class="classTitle">Class Index</h1>
 
   <%
   var cursor = db.doc.html.find().sort({name:1});
-  cursor.forEach( function(blob) { 
+  cursor.forEach( function(blob) {
   %>
       <div>
         <h2><a href="<%= blob.name %>"><%= blob.name %></a></h2>
       </div>
   <%
   });
-  %>    
+  %>
 <%
 }
 
