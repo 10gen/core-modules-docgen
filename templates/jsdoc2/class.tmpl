@@ -39,8 +39,9 @@ else {
   <if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.</if>
 </p>
 <!-- ============================== constructor summary ==================== -->
-<if test="data.constructors && data.constructors.length || data._params && data._params.length">
-  {! var ownConstructors = data.constructors; !}
+<if test="data.constructors && data.constructors.length">
+  {! var ownConstructors = data.constructors;
+     var ccount = 1; !}
   <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">
     <caption>{+classType+}Summary</caption>
     <thead>
@@ -50,36 +51,77 @@ else {
       </tr>
     </thead>
     <tbody>
-      <if test="data._params && data._params.length">
-        <tr>
-          <td class="attributes">{! if (data.isPrivate) output += "&lt;private&gt; "; if (data.isInner) output += "&lt;inner&gt; "; !}&nbsp;</td>
-          <td class="nameDescription" >
-            <div class="fixedFont"><b>{+ new Link().toSymbol(data._name).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(data._params) +}</if></div><div class="description">{+resolveLinks(summarize(data.desc))+}</div>
-          </td>
-        </tr>
-      </if>
       <if test="ownConstructors">
         <for each="member" in="ownConstructors">
           <tr>
             <td class="attributes">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; !}&nbsp;</td>
             <td class="nameDescription" >
-              <div class="fixedFont"><b>{+ new Link().toSymbol(member.name).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(member.params || member._params) +}</if></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+              <div class="fixedFont"><b>{+ new Link().toSymbol(member.name || member._name).inner('constructor', ccount)+}</b><if test="classType != 'Namespace '">{+ makeSignature(member.params || member._params) +}</if></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
             </td>
           </tr>
+          {! ccount = ccount + 1; !}
         </for>
       </if>
     </tbody>
   </table>
 </if>
-<!-- ============================== properties summary ===================== --><if test="data.properties.length">{! var ownProperties = data.properties.sort(makeSortby("name")); !}<if test="ownProperties.length"><table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {+data.alias+}."><caption>Field Summary</caption><thead><tr><th scope="col">Field Attributes</th><th scope="col">Field Name and Description</th></tr></thead><tbody><for each="member" in="ownProperties"><tr><td class="attributes">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; if (member.isConstant) output += "&lt;constant&gt; "; !}&nbsp;</td><td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div></td></tr></for></tbody></table></if><if test="data.inheritsFrom.length"><dl class="inheritsList">{! var borrowedMembers = data.properties.filter(function($) {return $.memberOf != data.alias}); var contributers = []; borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)}); for (var i = 0, l = contributers.length; i < l; i++) { output += "<dt>Fields borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>" + "<dd>" + borrowedMembers.filter(function($) { return $.memberOf == contributers[i] }).sort(makeSortby("name")).map(function($) { return new Link().toSymbol($.alias).withText($.name) }).join(", ")+"</dd>"; } !} </dl></if></if>
-<!-- ============================== methods summary ======================== --><if test="data.methods.length">{! var ownMethods = data.methods.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}<if test="ownMethods.length"><table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}."><caption>Method Summary</caption><thead><tr><th scope="col">Method Attributes</th><th scope="col">Method Name and Description</th></tr></thead><tbody><for each="member" in="ownMethods"><tr><td class="attributes"><if test="member.returns && member.returns[0]">{+member.returns[0].type+}</if><br />{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; !}&nbsp;</td><td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(summarize(member.desc))+}</div></td></tr></for></tbody></table></if><if test="data.inheritsFrom.length"><dl class="inheritsList">{! var borrowedMembers = data.methods.filter(function($) {return $.memberOf != data.alias}); var contributers = []; borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)}); for (var i = 0, l = contributers.length; i < l; i++) { output += "<dt>Methods borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>"+"<dd>" +borrowedMembers.filter(function($) { return $.memberOf == contributers[i] }).sort(makeSortby("name")).map(function($) { return new Link().toSymbol($.alias).withText($.name) }).join(", ")+"</dd>";} !} </dl></if></if>
+<!-- ============================== properties summary ===================== -->
+<if test="data.properties.length">
+  {! var ownProperties = data.properties.sort(makeSortby("name")); !}
+  <if test="ownProperties.length">
+    <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {+data.alias+}.">
+      <caption>Field Summary</caption>
+      <thead><tr><th scope="col">Field Attributes</th><th scope="col">Field Name and Description</th></tr></thead>
+      <tbody>
+        <for each="member" in="ownProperties">
+          <tr>
+            <td class="attributes">
+              <if test="member.type">
+                {+member.type+}&nbsp;<br />
+              </if>
+              {! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; if (member.isConstant) output += "&lt;constant&gt; "; !}&nbsp;
+            </td>
+            <td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+            </td>
+          </tr>
+        </for>
+      </tbody>
+    </table>
+  </if>
+  <if test="data.inheritsFrom.length">
+    <dl class="inheritsList">
+      {! var borrowedMembers = data.properties.filter(function($) {return $.memberOf != data.alias}); var contributers = []; borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)}); for (var i = 0, l = contributers.length; i < l; i++) { output += "<dt>Fields borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>" + "<dd>" + borrowedMembers.filter(function($) { return $.memberOf == contributers[i] }).sort(makeSortby("name")).map(function($) { return new Link().toSymbol($.alias).withText($.name) }).join(", ")+"</dd>"; } !}
+    </dl>
+  </if>
+</if>
+
+<!-- ============================== methods summary ======================== -->
+<if test="data.methods.length">{! var ownMethods = data.methods.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
+  <if test="ownMethods.length">
+    <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}."><caption>Method Summary</caption>
+      <thead><tr><th scope="col">Method Attributes</th><th scope="col">Method Name and Description</th></tr></thead>
+      <tbody>
+        <for each="member" in="ownMethods">
+          <tr>
+            <td class="attributes"><if test="member.returns && member.returns[0]">{+member.returns[0].type+}&nbsp;</if><br />{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; !}&nbsp;</td>
+            <td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(summarize(member.desc))+}</div></td>
+          </tr>
+        </for>
+      </tbody>
+    </table>
+  </if>
+  <if test="data.inheritsFrom.length"><dl class="inheritsList">{! var borrowedMembers = data.methods.filter(function($) {return $.memberOf != data.alias}); var contributers = []; borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)}); for (var i = 0, l = contributers.length; i < l; i++) { output += "<dt>Methods borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>"+"<dd>" +borrowedMembers.filter(function($) { return $.memberOf == contributers[i] }).sort(makeSortby("name")).map(function($) { return new Link().toSymbol($.alias).withText($.name) }).join(", ")+"</dd>";} !} </dl></if>
+</if>
+
 <if test="data.anonymous && data.anonymous.length"><!-- ============================== anonymous inner classes summary ==================== -->{! var ownAnon = data.anonymous.sort(makeSortby("name")); !}<if test="ownAnon.length"><table class="summaryTable" cellspacing="0" summary="A summary of the anonymous inner classes documented in the class {+data.alias+}."><caption>Anonymous Inner Class Summary</caption><thead><tr><th scope="col">Parameters</th><th scope="col">Name and Description</th></tr></thead><tbody><for each="member" in="ownAnon"><tr><td class="attributes"><if test="member.returns"><b>{+member.returns+}</b>&nbsp;</if></td><td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(summarize(member.desc))+}</div></td></tr></for></tbody></table></if></if>
+
+<!-- ============================== constructor details ==================== -->
 <if test="ownConstructors && ownConstructors.length">
-  <!-- ============================== constructor details ==================== -->
+  {! ccount = 1; !}
   <div class="details">
-    <a name="constructor"> </a>
     <div class="sectionTitle">{+classType+}Detail</div>
     <for each="member" in="ownConstructors">
+      <a name="constructor{+ccount+}"> </a>
       <div class="fixedFont">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; !}<b>{+ member.name +}</b><if test="classType != 'Namespace '">{+ makeSignature(member.params || member._params) +}</if></div>
       <div class="description">{+resolveLinks(member.desc)+}<if test="member.author"><br /><i>Author: </i>{+member.author+}.</if></div>
       <if test="member.example && member.example.length"><for each="example" in="member.example"><pre class="code">{+example+}</pre></for></if>
@@ -91,6 +133,7 @@ else {
       <if test="member.requires && member.requires.length"><dl class="detailList"><dt class="heading">Requires:</dt><for each="item" in="member.requires"><dd>{+ resolveLinks(item) +}</dd></for></dl></if>
       <if test="member.see && member.see.length"><dl class="detailList"><dt class="heading">See:</dt><for each="item" in="member.see"><dd>{+ new Link().toSymbol(item) +}</dd></for></dl></if>
       <if test="!$member_last"><hr /></if>
+      {! ccount = ccount + 1; !}
     </for>
   </div>
 </if>
@@ -145,5 +188,5 @@ else {
   </for>
 </if>
 <hr />
-<!--</div>-->
+
 <if test="defined(ownAnon) && ownAnon.length"><!-- ============================== anonymous inner classes details ========================= --><div class="sectionTitle">Anonymous Inner Classes Detail</div><for each="member" in="ownAnon"><a name="{+Link.symbolNameToLinkName(member)+}"> </a><div class="fixedFont"><if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if><if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name || member._name+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(member.desc)+}<if test="member.srcFile != data.srcFile"><br /><i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.</if><if test="member.author"><br /><i>Author: </i>{+member.author+}.</if></div><if test="member.example && member.example.length"><for each="example" in="member.example"><pre class="code">{+example+}</pre></for></if><if test="defined(member._params) && member._params.length"><dl class="detailList"><dt class="heading">Parameters:</dt><for each="item" in="member._params"><dt><b>{+item+}</b></dt></for></dl></if><if test="member.deprecated"><dl class="detailList"><dt class="heading">Deprecated:</dt><dt>{+member.deprecated+}</dt></dl></if><if test="member.since"><dl class="detailList"><dt class="heading">Since:</dt><dd>{+ member.since +}</dd></dl></if><if test="member.exceptions && member.exceptions.length"><dl class="detailList"><dt class="heading">Throws:</dt><for each="item" in="member.exceptions"><dt>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b></dt><dd>{+resolveLinks(item.desc)+}</dd></for></dl></if><if test="member.returns"><dl class="detailList"><dt class="heading">Returns:</dt><dd>{+resolveLinks(member.returns)+}</dd></dl></if><if test="member.requires && member.requires.length"><dl class="detailList"><dt class="heading">Requires:</dt><for each="item" in="member.requires"><dd>{+ resolveLinks(item) +}</dd></for></dl></if><if test="member.see && member.see.length"><dl class="detailList"><dt class="heading">See:</dt><for each="item" in="member.see"><dd>{+ new Link().toSymbol(item) +}</dd></for></dl></if><if test="!$member_last"><hr /></if></for></if><hr /></div>

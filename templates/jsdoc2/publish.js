@@ -60,11 +60,13 @@ function publish(symbolSet) {
     }
     docUrl = docUrl.substring(docUrl.indexOf("/")+1);
 
-
-//    Link.base = "../"+docUrl;
     for (var i = 0, l = classes.length; i < l; i++) {
-        if(classes[i] == true) continue;
 	var symbol = classes[i];
+        // if this is a javascript class, the constructor is part of the main object.  separate it out before processing.
+        if(symbol.desc && symbol._params) {
+            if(!symbol.constructors) symbol.constructors = [];
+            symbol.constructors.push({ desc : symbol.desc, name : symbol._name, _params : symbol._params, alias : symbol.alias, isPublic : true, isa : "CONSTRUCTOR", memberOf : symbol._name});
+        }
 	var output = "";
 	output = classTemplate.process(symbol);
 

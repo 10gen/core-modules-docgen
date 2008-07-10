@@ -76,7 +76,7 @@ if(generatedHTML) {
 <form method="POST">
   <input type="hidden" name="version" value="<%= v %>" />
   <legend>Add JavaScript file or folder: </legend>
-  <input type="text" name="src" />
+  <input type="text" width="30" name="src" />
   <input type="submit" name="addSrc" value="Add" />
 </form>
 

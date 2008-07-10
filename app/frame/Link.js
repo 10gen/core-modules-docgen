@@ -14,8 +14,9 @@ function Link() {
 		if (defined(targetName)) this.targetName = targetName;
 		return this;
 	}
-	this.inner = function(inner) {
+	this.inner = function(inner, num) {
 		if (defined(inner)) this.innerName = inner;
+                if(defined(num)) this.innerName = this.innerName+num;
 		return this;
 	}
 	this.withText = function(text) {
@@ -123,11 +124,11 @@ Link.prototype._makeSymbolLink = function(alias) {
 
 	if ((!linkTo.isa == "CONSTRUCTOR" || (linkTo.is && !linkTo.is("CONSTRUCTOR"))) && !linkTo.isNamespace) { // it's a method or property
 	    linkPath = escape(linkTo.memberOf) || "_global_";
-	    linkPath += publish.conf.ext + "#" + Link.symbolNameToLinkName(linkTo);
+	    linkPath += "#" + Link.symbolNameToLinkName(linkTo);
 	}
 	else {
 	    linkPath = escape(linkTo.alias);
-	    linkPath += publish.conf.ext + (this.classLink? "":"#" + Link.hashPrefix + "constructor");
+	    linkPath += (this.classLink? "":"#" + Link.hashPrefix + "constructor");
 	}
 	linkPath = linkBase + linkPath
     }
