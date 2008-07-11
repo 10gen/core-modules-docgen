@@ -13,12 +13,12 @@ Doc.admin.toDB = function(version) {
     var src = db.doc.src.find({version : version});
     while(src.hasNext()) {
         var z = src.next();
-        Util.Doc.SrcToDb(z.filename);
+        Util.Doc.srcToDb(z.filename);
     }
 }
 
 Doc.admin.toHTML = function(out_dir, version) {
-    Util.Doc.DbToHTML(out_dir, version);
+    Util.Doc.dbToHTML(out_dir, version);
 }
 
 Doc.admin.all = function(out_dir, version) {
