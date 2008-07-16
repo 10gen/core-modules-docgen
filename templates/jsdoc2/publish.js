@@ -114,6 +114,10 @@ function include(path) {
     return IO.readFile(path);
 }
 
+function makeSrcLink(path) {
+    return '<a href="code='+path.substring(1, path.lastIndexOf(".")).replace(/\//g, ".")+'.js">'+path+'</a>';
+}
+
 function makeSrcFile(path, srcDir, name) {
     if (JSDOC.opt.s) return;
 
@@ -162,10 +166,11 @@ function isConstructor(data) {
 function resolveLinks(str, from) {
     if(!str) str = "";
     str = str.replace(/\{@link ([^} ]+) ?\}/gi,
-    function(match, symbolName) {
+                                                function(match, symbolName) {
 	return new Link().toSymbol(symbolName);
     }
-);
+    );
 
 return str;
 }
+

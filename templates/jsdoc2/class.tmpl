@@ -36,7 +36,7 @@ else {
     <br />Extends {+data.augments.sort().map(function($) { return new Link().toSymbol($); }).join(", ")+}.<br />
   </if>
   {# resolveLinks(data.classDesc) #}
-  <if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.</if>
+  <if test="!data.isBuiltin() && data.srcFile">{# isn't defined in any file #}<br /><i>Defined in: </i> {+makeSrcLink(data.srcFile)+}.</if>
 </p>
 <!-- ============================== constructor summary ==================== -->
 <if test="data.constructors && data.constructors.length">

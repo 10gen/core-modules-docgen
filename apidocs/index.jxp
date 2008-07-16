@@ -78,7 +78,7 @@ function renderBody(classname) {
 
         // if blob != null, blob.content should never be null, but you never know...
         if(blob != null && blob.content != null) {
-            blob.content = "<tt>"+blob.content+"</tt>";
+            blob.content = "<h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
         }
     }
     else {
