@@ -15,9 +15,9 @@ function Link() {
 		return this;
 	}
 	this.inner = function(inner, num) {
-		if (defined(inner)) this.innerName = inner;
-                if(defined(num)) this.innerName = this.innerName+num;
-		return this;
+            if (defined(inner)) this.innerName = inner;
+            if(defined(num)) this.innerName = this.innerName+num;
+            return this;
 	}
 	this.withText = function(text) {
 		if (defined(text)) this.text = text;
@@ -128,7 +128,7 @@ Link.prototype._makeSymbolLink = function(alias) {
 	}
 	else {
 	    linkPath = escape(linkTo.alias);
-	    linkPath += (this.classLink? "":"#" + Link.hashPrefix + "constructor");
+	    linkPath += (this.classLink? "":"#" + Link.hashPrefix + this.innerName);
 	}
 	linkPath = linkBase + linkPath
     }
