@@ -69,64 +69,63 @@ function renderBody(classname) {
     if (classname != null) {
         classname = classname.substring(1);
     }
-%>
-     <h1 class="classTitle">Class Information</h1>
 
-  <%
-  var blob = db.doc.html.findOne({name:classname});
+    if (classname.startsWith("code=")) {
+        var suffix = classname.substring(classname.lastIndexOf("."));
+        var code = "/"+classname.substring(5, classname.lastIndexOf(".")).replace(/\./g, "/")+suffix;
+        log("file: "+code);
+        var blob = db.doc.code.findOne({filename : code});
 
-  if(blob == null) {
-    %>
-    Classname <%= classname %> not Found
-    <%
-   }
-   else {
-   %>
-      <div>
-      <%= blob.content %>
-      </div>
-  <%
-  }
-  %>
-<%
+        // if blob != null, blob.content should never be null, but you never know...
+        if(blob != null && blob.content != null) {
+            blob.content = "<tt>"+blob.content+"</tt>";
+        }
+    }
+    else {
+        var blob = db.doc.html.findOne({name:classname});
+    }
+    if(blob == null) {
+        print(classname +" not found");
+    }
+    else {
+        %>
+        <div>
+          <%= blob.content %>
+        </div>
+        <%
+    }
 }
-%>
 
-
-<%
 function renderIndex() {
-%>
-     <h1 class="classTitle">Class Index</h1>
+    %>
+    <h1 class="classTitle">Class Index</h1>
 
-  <%
-  var cursor = db.doc.html.find().sort({name:1});
-  cursor.forEach( function(blob) {
-  %>
-      <div>
-        <h2><a href="<%= blob.name %>"><%= blob.name %></a></h2>
-        <p><%= blob.desc ? blob.desc : "" %></p>
-      </div>
-  <%
-  });
-  %>
-<%
+    <%
+    var cursor = db.doc.html.find().sort({name:1});
+    cursor.forEach( function(blob) {
+        %>
+        <div>
+          <h2><a href="<%= blob.name %>"><%= blob.name %></a></h2>
+          <p><%= blob.desc ? blob.desc : "" %></p>
+        </div>
+        <%
+    });
 }
 
 function renderSearch() {
-%>
-                  <h1>Search</h1>
-                  <%
-                     var q = new RegExp(request.search, "i");
-                     var cursor = db.doc.find({"name": q});
-                     %>
-                  <h2><%= cursor.count() %> Results</h2>
-                     <%
-                     while(cursor.hasNext()) {
-                         var obj = cursor.next();
-                             %>
-                             <div class="searchresult"><a href="<%= obj.name %>"><%= obj.name %></a></div>
-                             <%
-                     }
-
+    %>
+    <h1>Search</h1>
+    <%
+    var q = new RegExp(request.search, "i");
+    var cursor = db.doc.find({"name": q});
+    %>
+    <h2><%= cursor.count() %> Results</h2>
+    <%
+    while(cursor.hasNext()) {
+        var obj = cursor.next();
+       %>
+    <div class="searchresult"><a href="<%= obj.name %>"><%= obj.name %></a></div>
+    <%
+    }
 }
 %>
