@@ -75,7 +75,7 @@ if(generatedHTML) {
 <h3>Sources to be included:</h3>
 <form method="POST">
   <input type="hidden" name="version" value="<%= v %>" />
-  <legend>Add JavaScript file or folder: </legend>
+  <legend>Add a file or folder: </legend>
   <input type="text" width="30" name="src" />
   <input type="submit" name="addSrc" value="Add" />
 </form>

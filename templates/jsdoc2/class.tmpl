@@ -79,9 +79,13 @@ else {
               <if test="member.type">
                 {+member.type+}&nbsp;<br />
               </if>
-              {! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; if (member.isConstant) output += "&lt;constant&gt; "; !}&nbsp;
+              {! if (member.isPrivate) output += "&lt;private&gt; ";  if (member.isProtected) output += "&lt;protected&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; if (member.isConstant) output += "&lt;constant&gt; "; !}&nbsp;
             </td>
-            <td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+            <td class="nameDescription">
+              <div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b></div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+              <if test="member.deprecated">
+                <b>Deprecated: </b>{+member.deprecated+}
+              </if>
             </td>
           </tr>
         </for>
@@ -103,8 +107,12 @@ else {
       <tbody>
         <for each="member" in="ownMethods">
           <tr>
-            <td class="attributes"><if test="member.returns && member.returns[0]">{+member.returns[0].type+}&nbsp;</if><br />{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; !}&nbsp;</td>
-            <td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(summarize(member.desc))+}</div></td>
+            <td class="attributes"><if test="member.returns && member.returns[0]">{+member.returns[0].type+}&nbsp;</if><br />{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isProtected) output += "&lt;protected&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; !}&nbsp;</td>
+            <td class="nameDescription"><div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}</div><div class="description">{+resolveLinks(summarize(member.desc))+}</div>
+              <if test="member.deprecated">
+                <b>Deprecated: </b>{+member.deprecated+}
+              </if>
+            </td>
           </tr>
         </for>
       </tbody>

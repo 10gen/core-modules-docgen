@@ -104,6 +104,7 @@ function renderIndex() {
   %>
       <div>
         <h2><a href="<%= blob.name %>"><%= blob.name %></a></h2>
+        <p><%= blob.desc ? blob.desc : "" %></p>
       </div>
   <%
   });
