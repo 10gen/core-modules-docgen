@@ -4,6 +4,7 @@ if(!Doc.admin) Doc.admin = {};
 
 // Get java and js src and send their doc to the db
 Doc.admin.toDB = function(version) {
+    Util.Doc.initialize();
     Util.Doc.setVersion(version);
 
     // clean out the doc collections
