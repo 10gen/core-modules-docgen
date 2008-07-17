@@ -4,6 +4,9 @@ if(!Doc.admin) Doc.admin = {};
 
 // Get java and js src and send their doc to the db
 Doc.admin.toDB = function(version) {
+    if(Util.Doc.inProgress) {
+        return "in progress";
+    }
     Util.Doc.initialize();
     Util.Doc.setVersion(version);
 
@@ -21,10 +24,16 @@ Doc.admin.toDB = function(version) {
 }
 
 Doc.admin.toHTML = function(out_dir, version) {
+    if(Util.Doc.inProgress) {
+        return "in progress";
+    }
     Util.Doc.dbToHTML(out_dir, version);
 }
 
 Doc.admin.all = function(out_dir, version) {
+    if(Util.Doc.inProgress) {
+        return "in progress";
+    }
     this.toDB(version);
     this.toHTML(out_dir, version);
 }

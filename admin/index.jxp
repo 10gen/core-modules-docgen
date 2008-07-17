@@ -10,15 +10,22 @@ var switchVersion = "Switch To";
 
 var v = request.version ? request.version : '';
 var generatedHTML = (request.action == everything || request.action == toHTML);
+var inProgress = Util.Doc.inProgress;
 
 if(request.action == everything) {
-    Doc.admin.all(request.d, v);
+    if(Doc.admin.all(request.d, v) == "in progress") {
+        inProgress = true;
+    }
 }
 else if(request.action == toDB) {
-    Doc.admin.toDB(v);
+    if(Doc.admin.toDB(v) == "in progress") {
+        inProgress = true;
+    }
 }
 else if(request.action == toHTML) {
-    Doc.admin.toHTML(request.d, v);
+    if(Doc.admin.toHTML(request.d, v) == "in progress") {
+        inProgress = true;
+    }
 }
 else if(request.id) {
    db.doc.src.remove({_id: request.id});
@@ -29,7 +36,11 @@ else if (request.action != switchVersion) {
     }
 }
 
-%>
+if(inProgress) { %>
+
+<h2>Someone else is generating documentation at the moment.  Please try again later.</h2>
+
+<% } else { %>
 
 <div>Version <%= v %></div>
 
@@ -93,3 +104,5 @@ if(generatedHTML) {
 </div>
 
 </div>
+
+<% } %>
