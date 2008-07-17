@@ -125,15 +125,18 @@ else {
 <if test="data.anonymous && data.anonymous.length">
   {! var ownAnon = data.anonymous.sort(makeSortby("name")); !}
   <if test="ownAnon.length">
-    <table class="summaryTable" cellspacing="0" summary="A summary of the anonymous inner classes documented in the class {+data.alias+}."><caption>Anonymous Inner Class Summary</caption>
+    <table class="summaryTable" cellspacing="0" summary="A summary of the anonymous inner classes documented in the class {+data.alias+}."><caption>Entities Exposed to JavaScript Summary</caption>
       <thead><tr><th scope="col">Parameters</th><th scope="col">Name and Description</th></tr></thead>
       <tbody>
         <for each="member" in="ownAnon">
           <tr>
-            <td class="attributes"><if test="member.returns && member.returns[0]"><b>{+member.returns[0].type+}</b>&nbsp;</if></td>
+            <td class="attributes">
+              <if test="member.returns && member.returns[0]"><b>{+member.returns[0].type+}</b>&nbsp;</if>
+              <if test="member.isField && member.type"><b>{+member.type+}</b>&nbsp;</if>
+            </td>
             <td class="nameDescription">
               <div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if>
-                <b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b>{+makeSignature(member.params || member._params)+}
+                <b>{+new Link().toSymbol(member.alias).withText(member.name || member._name)+}</b><if test="!member.isField">{+makeSignature(member.params || member._params)+}</if>
               </div>
               <div class="description">{+resolveLinks(summarize(member.desc))+}</div>
             </td>
@@ -218,12 +221,12 @@ else {
 
 <!-- ============================== anonymous inner classes details ========================= -->
 <if test="ownAnon && ownAnon.length">
-  <div class="sectionTitle">Anonymous Inner Class Detail</div>
+  <div class="sectionTitle">Entities Exposed to JavaScript Detail</div>
   <for each="member" in="ownAnon">
     <a name="{+Link.symbolNameToLinkName(member)+}"> </a>
     <div class="fixedFont">{! if (member.isPrivate) output += "&lt;private&gt; "; if (member.isInner) output += "&lt;inner&gt; "; if (member.isStatic) output += "&lt;static&gt; "; !}
       <if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
-      <if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name || member._name+}</b>{+makeSignature(member.params || member._params)+}
+      <if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name || member._name+}</b><if test="!member.isField">{+makeSignature(member.params || member._params)+}</if>
     </div>
     <div class="description">{+resolveLinks(member.desc)+}
       <if test="member.srcFile != data.srcFile"><br /><i>Defined in: </i> {+makeSrcLink(member.srcFile)+}.</if>

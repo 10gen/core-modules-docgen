@@ -1,9 +1,23 @@
+<%
+   var url = request.getURI();
+   var classname = url.substring(url.lastIndexOf("/"));
+
+   var title = classname;
+   if(request.action == "Search")
+       title = "Search";
+   else if(classname == "/")
+       title = "Index";
+   else
+       title = classname.substring(1);
+
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>JsDoc Reference - Index</title>
+    <title>JsDoc Reference - <%= title %></title>
     <meta name="generator" content="JsDoc Toolkit" />
     <link rel="stylesheet" href="assets/default.css" />
   </head>
@@ -41,21 +55,17 @@
 
 
     <div id="content">
-
-<%
- var url = request.getURI();
- var classname = url.substring(url.lastIndexOf("/"));
-
-if (classname == "/") {
-    renderIndex();
-}
-else if (request.action == "Search") {
-    renderSearch();
-}
-else {
-    renderBody(classname);
-}
-%>
+      <%
+         if (classname == "/") {
+             renderIndex();
+         }
+         else if (request.action == "Search") {
+             renderSearch();
+         }
+         else {
+             renderBody(classname);
+         }
+      %>
 
     </div>
     <div class="fineprint" style="clear:both">
