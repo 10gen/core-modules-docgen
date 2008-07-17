@@ -16,6 +16,7 @@ Doc.admin.toDB = function(version) {
         var z = src.next();
         Util.Doc.srcToDb(z.filename);
     }
+    Util.Doc.javaSrcsToDb();
 }
 
 Doc.admin.toHTML = function(out_dir, version) {

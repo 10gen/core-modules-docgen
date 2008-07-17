@@ -115,7 +115,10 @@ function include(path) {
 }
 
 function makeSrcLink(path) {
-    return '<a href="code='+path.substring(1, path.lastIndexOf(".")).replace(/\//g, ".")+'.js">'+path+'</a>';
+    if(path)
+        return '<a href="code='+path.substring(1, path.lastIndexOf(".")).replace(/\//g, ".")+'.js">'+path+'</a>';
+    else
+        return "No source file specified.";
 }
 
 function makeSignature(params) {
