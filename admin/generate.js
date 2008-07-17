@@ -6,7 +6,8 @@ if(!Doc.admin) Doc.admin = {};
 Doc.admin.toDB = function(version) {
     Util.Doc.setVersion(version);
 
-    // clean out the doc db
+    // clean out the doc collections
+    db.doc.code.drop();
     db.doc.remove({version : version});
 
     // restock
