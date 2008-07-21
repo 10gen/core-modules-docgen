@@ -137,7 +137,7 @@ else {
             </td>
             <td class="nameDescription">
               <div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if>
-                <b>{+anonClassLink(member.name || member._name)+}</b><if test="!member.isField">{+makeSignature(member.params || member._params)+}</if>
+                <b>{+anonClassLink(data.alias, member.name || member._name)+}</b><if test="!member.isField">{+makeSignature(member.params || member._params)+}</if>
               </div>
               <div class="description">{+resolveLinks(summarize(member.desc))+}</div>
             </td>
