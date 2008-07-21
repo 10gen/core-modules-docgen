@@ -70,28 +70,48 @@ else {
     </div>
 </div>
 
-    <div id="rightmain">
-      <div align="center"><a href="./">Class Index</a></div>
-      <hr />
-      <h2>Classes</h2>
-      <ul class="classList">
-      <%
-        var cursor = db.doc.html.find().sort({name:1});
+<div id="rightmain">
+  <div align="center"><a href="./">Class Index</a></div>
+  <hr />
+  <h2>Classes</h2>
+  <ul class="classList">
+    <%
 
-        cursor.forEach( function(blob) {
-            var name = blob.name;
+var cursor = db.doc.html.find().sort({name:1});
+var pkgs = {};
 
-           %>
-           <div>
-             <h2><a href="<%= name %>" style="font-weight: normal; font-size: 100%;"><%= name %></a></h2>
-           </div>
-           <%
-        });
-      %>
-      </ul>
-      <hr />
+// create a table based on the class heirarchy
+cursor.forEach( function(blob) {
+    var curPkg = pkgs;
+    var heirarchy = blob.name.split(".");
+    for(var i=0; i<heirarchy.length; i++) {
+        if(!(heirarchy[i] in curPkg)) {
+            curPkg[heirarchy[i]] = {};
+        }
+        curPkg = curPkg[heirarchy[i]];
+    }
 
-    </div>
+});
+
+// traverse the tree to print the classes
+function printSidebar(curPkg, curPath, indent) {
+    for(var k in curPkg) {
+        %>
+        <div>
+        <a href="<%= curPath+k %>" style="font-weight: normal; font-size: 100%; margin-left: <%= indent %>em;"><%= k %></a>
+        </div>
+        <%
+        printSidebar(curPkg[k], curPath+k+".", indent+1);
+    }
+}
+
+printSidebar(pkgs, "", 0);
+
+%>
+    </ul>
+    <hr />
+
+</div>
 
 
     <div id="footer" style="clear:both">
