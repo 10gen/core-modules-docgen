@@ -1,32 +1,35 @@
 <% /**
 *      Copyright (C) 2008 10gen Inc.
-*  
+*
 *    Licensed under the Apache License, Version 2.0 (the "License");
 *    you may not use this file except in compliance with the License.
 *    You may obtain a copy of the License at
-*  
+*
 *       http://www.apache.org/licenses/LICENSE-2.0
-*  
+*
 *    Unless required by applicable law or agreed to in writing, software
 *    distributed under the License is distributed on an "AS IS" BASIS,
 *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *    See the License for the specific language governing permissions and
 *    limitations under the License.
-*/ %>
+*/
 
-<%
-   var url = request.getURI();
-   var classname = url.substring(url.lastIndexOf("/"));
+var url = request.getURI();
+var classname = url.substring(url.lastIndexOf("/"));
 
-   var title = classname;
-   if(request.action == "Search")
-       title = "Search";
-   else if(classname == "/")
-       title = "Index";
-   else
-       title = classname.substring(1);
+var title = classname;
+if(request.action == "Search")
+    title = "Search";
+else if(classname == "/")
+    title = "Index";
+else
+    title = classname.substring(1);
 
-%>
+if(htmlheader) {
+    htmlheader(title);
+}
+else {
+    %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -39,38 +42,19 @@
   </head>
 
   <body>
+<%
+}
+%>
+
     <div id="header">
       <form action="./search" method="POST">
         <input type="text" name="search" /><input type="submit" name="action" value="Search" />
       </form>
     </div>
 
+    <br />
 
-    <div id="index">
-      <div align="center"><a href="./">Class Index</a></div>
-      <hr />
-      <h2>Classes</h2>
-      <ul class="classList">
-      <%
-        var cursor = db.doc.html.find().sort({name:1});
-
-        cursor.forEach( function(blob) {
-            var name = blob.name;
-
-           %>
-           <div>
-             <h2><a href="<%= name %>"><%= name %></a></h2>
-           </div>
-           <%
-        });
-      %>
-      </ul>
-      <hr />
-
-    </div>
-
-
-    <div id="content">
+    <div id="content" class="apidocs">
       <%
          if (classname == "/") {
              renderIndex();
@@ -84,13 +68,39 @@
       %>
 
     </div>
-    <div class="fineprint" style="clear:both">
+</div>
 
-      Documentation (c) 2008 10gen Inc.    </div>
+    <div id="rightmain">
+      <div align="center"><a href="./">Class Index</a></div>
+      <hr />
+      <h2>Classes</h2>
+      <ul class="classList">
+      <%
+        var cursor = db.doc.html.find().sort({name:1});
+
+        cursor.forEach( function(blob) {
+            var name = blob.name;
+
+           %>
+           <div>
+             <h2><a href="<%= name %>" style="font-weight: normal; font-size: 100%;"><%= name %></a></h2>
+           </div>
+           <%
+        });
+      %>
+      </ul>
+      <hr />
+
+    </div>
+
+
+    <div id="footer" style="clear:both">
+      <p>Documentation &copy; 2008 10gen. All rights reserved.</p></div>
   </body>
 </html>
 
 <%
+
 function renderBody(classname) {
     if (classname != null) {
         classname = classname.substring(1);
@@ -104,7 +114,7 @@ function renderBody(classname) {
 
         // if blob != null, blob.content should never be null, but you never know...
         if(blob != null && blob.content != null) {
-            blob.content = "<h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
+            blob.content = "<br /><h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
         }
     }
     else {
