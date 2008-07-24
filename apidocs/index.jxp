@@ -161,7 +161,7 @@ function renderIndex() {
        var text = blob.alias ? blob.alias : blob.name;
         %>
         <div>
-          <h2><a href="<%= text %>"><%= text %></a></h2>
+          <h2><a href="<%= blob.name %>"><%= text %></a></h2>
           <p><%= blob.desc ? blob.desc : "" %></p>
         </div>
         <%
