@@ -91,7 +91,8 @@ var checkIfExists = function(h, idx) {
             content : '<br /><div id="content"><h1 class="classTitle">'+path+'</h1><p class="description">There is no documentation for this package, yet.</p></div>',
             name : path,
             desc : "",
-            ts: new Date()
+            ts: new Date(),
+            version : null
         };
         db.doc.save(obj);
     }
