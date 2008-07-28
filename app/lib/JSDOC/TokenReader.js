@@ -1,12 +1,12 @@
 /**
 *      Copyright (C) 2008 10gen Inc.
-*  
+*
 *    Licensed under the Apache License, Version 2.0 (the "License");
 *    you may not use this file except in compliance with the License.
 *    You may obtain a copy of the License at
-*  
+*
 *       http://www.apache.org/licenses/LICENSE-2.0
-*  
+*
 *    Unless required by applicable law or agreed to in writing, software
 *    distributed under the License is distributed on an "AS IS" BASIS,
 *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ JSDOC.TokenReader.prototype.tokenize = function(/**JSDOC.TextStream*/stream) {
 		if (this.read_space(stream, tokens))     continue;
 		if (this.read_newline(stream, tokens))   continue;
 		if (this.read_word(stream, tokens))      continue;
-		
+
 		// if execution reaches here then an error has happened
 		tokens.push(new JSDOC.Token(stream.next(), "TOKN", "UNKNOWN_TOKEN"));
 	}
@@ -58,7 +58,7 @@ JSDOC.TokenReader.prototype.read_word = function(/**JSDOC.TokenStream*/stream, t
 	while (!stream.look().eof && JSDOC.Lang.isWordChar(stream.look())) {
 		found += stream.next();
 	}
-	
+
 	if (found === "") {
 		return false;
 	}
@@ -79,7 +79,7 @@ JSDOC.TokenReader.prototype.read_punc = function(/**JSDOC.TokenStream*/stream, t
 	while (!stream.look().eof && JSDOC.Lang.punc(found+stream.look())) {
 		found += stream.next();
 	}
-	
+
 	if (found === "") {
 		return false;
 	}
@@ -94,11 +94,11 @@ JSDOC.TokenReader.prototype.read_punc = function(/**JSDOC.TokenStream*/stream, t
  */
 JSDOC.TokenReader.prototype.read_space = function(/**JSDOC.TokenStream*/stream, tokens) {
 	var found = "";
-	
+
 	while (!stream.look().eof && JSDOC.Lang.isSpace(stream.look())) {
 		found += stream.next();
 	}
-	
+
 	if (found === "") {
 		return false;
 	}
@@ -114,11 +114,11 @@ JSDOC.TokenReader.prototype.read_space = function(/**JSDOC.TokenStream*/stream, 
  */
 JSDOC.TokenReader.prototype.read_newline = function(/**JSDOC.TokenStream*/stream, tokens) {
 	var found = "";
-	
+
 	while (!stream.look().eof && JSDOC.Lang.isNewline(stream.look())) {
 		found += stream.next();
 	}
-	
+
 	if (found === "") {
 		return false;
 	}
@@ -135,13 +135,13 @@ JSDOC.TokenReader.prototype.read_newline = function(/**JSDOC.TokenStream*/stream
 JSDOC.TokenReader.prototype.read_mlcomment = function(/**JSDOC.TokenStream*/stream, tokens) {
 	if (stream.look() == "/" && stream.look(1) == "*") {
 		var found = stream.next(2);
-		
+
 		while (!stream.look().eof && !(stream.look(-1) == "/" && stream.look(-2) == "*")) {
 			found += stream.next();
 		}
-		
+
 		// to start doclet we allow /** or /*** but not /**/ or /****
-		if (/^\/\*\*([^\/]|\*[^*])/.test(found) && this.keepDocs) tokens.push(new JSDOC.Token(found, "COMM", "JSDOC"));
+		if (/^\/\*\*([^\/]|\*[^*])/.test(found) && !(JSDOC.licenseRegexp).test(found) && this.keepDocs) tokens.push(new JSDOC.Token(found, "COMM", "JSDOC"));
 		else if (this.keepComments) tokens.push(new JSDOC.Token(found, "COMM", "MULTI_LINE_COMM"));
 		return true;
 	}
@@ -155,14 +155,14 @@ JSDOC.TokenReader.prototype.read_slcomment = function(/**JSDOC.TokenStream*/stre
 	var found;
 	if (
 		(stream.look() == "/" && stream.look(1) == "/" && (found=stream.next(2)))
-		|| 
+		||
 		(stream.look() == "<" && stream.look(1) == "!" && stream.look(2) == "-" && stream.look(3) == "-" && (found=stream.next(4)))
 	) {
-		
+
 		while (!stream.look().eof && !JSDOC.Lang.isNewline(stream.look())) {
 			found += stream.next();
 		}
-		
+
 		if (this.keepComments) {
 			tokens.push(new JSDOC.Token(found, "COMM", "SINGLE_LINE_COMM"));
 		}
@@ -178,7 +178,7 @@ JSDOC.TokenReader.prototype.read_dbquote = function(/**JSDOC.TokenStream*/stream
 	if (stream.look() == "\"") {
 		// find terminator
 		var string = stream.next();
-		
+
 		while (!stream.look().eof) {
 			if (stream.look() == "\\") {
 				if (JSDOC.Lang.isNewline(stream.look(1))) {
@@ -211,7 +211,7 @@ JSDOC.TokenReader.prototype.read_snquote = function(/**JSDOC.TokenStream*/stream
 	if (stream.look() == "'") {
 		// find terminator
 		var string = stream.next();
-		
+
 		while (!stream.look().eof) {
 			if (stream.look() == "\\") { // escape sequence
 				string += stream.next(2);
@@ -236,13 +236,13 @@ JSDOC.TokenReader.prototype.read_numb = function(/**JSDOC.TokenStream*/stream, t
 	if (stream.look() === "0" && stream.look(1) == "x") {
 		return this.read_hex(stream, tokens);
 	}
-	
+
 	var found = "";
-	
+
 	while (!stream.look().eof && JSDOC.Lang.isNumber(found+stream.look())){
 		found += stream.next();
 	}
-	
+
 	if (found === "") {
 		return false;
 	}
@@ -256,14 +256,14 @@ JSDOC.TokenReader.prototype.read_numb = function(/**JSDOC.TokenStream*/stream, t
 	requires("../lib/JSDOC/TextStream.js");
 	requires("../lib/JSDOC/Token.js");
 	requires("../lib/JSDOC/Lang.js");
-	
+
 	plan(3, "testing JSDOC.TokenReader.prototype.read_numb");
-	
+
 	//// setup
 	var src = "function foo(num){while (num+8.0 >= 0x20 && num < 0777){}}";
 	var tr = new JSDOC.TokenReader();
 	var tokens = tr.tokenize(new JSDOC.TextStream(src));
-	
+
 	var hexToken, octToken, decToken;
 	for (var i = 0; i < tokens.length; i++) {
 		if (tokens[i].name == "HEX_DEC") hexToken = tokens[i];
@@ -271,7 +271,7 @@ JSDOC.TokenReader.prototype.read_numb = function(/**JSDOC.TokenStream*/stream, t
 		if (tokens[i].name == "DECIMAL") decToken = tokens[i];
 	}
 	////
-	
+
 	is(decToken.data, "8.0", "decimal number is found in source.");
 	is(hexToken.data, "0x20", "hexdec number is found in source (issue #99).");
 	is(octToken.data, "0777", "octal number is found in source.");
@@ -282,7 +282,7 @@ JSDOC.TokenReader.prototype.read_numb = function(/**JSDOC.TokenStream*/stream, t
  */
 JSDOC.TokenReader.prototype.read_hex = function(/**JSDOC.TokenStream*/stream, tokens) {
 	var found = stream.next(2);
-	
+
 	while (!stream.look().eof) {
 		if (JSDOC.Lang.isHexDec(found) && !JSDOC.Lang.isHexDec(found+stream.look())) { // done
 			tokens.push(new JSDOC.Token(found, "NUMB", "HEX_DEC"));
@@ -301,7 +301,7 @@ JSDOC.TokenReader.prototype.read_hex = function(/**JSDOC.TokenStream*/stream, to
 JSDOC.TokenReader.prototype.read_regx = function(/**JSDOC.TokenStream*/stream, tokens) {
 	if (
 		stream.look() == "/"
-		&& 
+		&&
 		(
 			!tokens.last()
 			||
@@ -314,18 +314,18 @@ JSDOC.TokenReader.prototype.read_regx = function(/**JSDOC.TokenStream*/stream, t
 		)
 	) {
 		var regex = stream.next();
-		
+
 		while (!stream.look().eof) {
 			if (stream.look() == "\\") { // escape sequence
 				regex += stream.next(2);
 			}
 			else if (stream.look() == "/") {
 				regex += stream.next();
-				
+
 				while (/[gmi]/.test(stream.look())) {
 					regex += stream.next();
 				}
-				
+
 				tokens.push(new JSDOC.Token(regex, "REGX", "REGX"));
 				return true;
 			}
