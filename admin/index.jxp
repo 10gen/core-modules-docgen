@@ -1,12 +1,12 @@
 <% /**
 *      Copyright (C) 2008 10gen Inc.
-*  
+*
 *    Licensed under the Apache License, Version 2.0 (the "License");
 *    you may not use this file except in compliance with the License.
 *    You may obtain a copy of the License at
-*  
+*
 *       http://www.apache.org/licenses/LICENSE-2.0
-*  
+*
 *    Unless required by applicable law or agreed to in writing, software
 *    distributed under the License is distributed on an "AS IS" BASIS,
 *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,22 +24,20 @@ var toHTML = "DB to HTML";
 var toDB = "Source to DB";
 var switchVersion = "Switch To";
 
-var v = request.version ? request.version : '';
-var generatedHTML = (request.action == everything || request.action == toHTML);
 var inProgress = Util.Doc.inProgress;
 
 if(request.action == everything) {
-    if(Doc.admin.all(request.d, v) == "in progress") {
+    if(Doc.admin.all(request.d) == "in progress") {
         inProgress = true;
     }
 }
 else if(request.action == toDB) {
-    if(Doc.admin.toDB(v) == "in progress") {
+    if(Doc.admin.toDB() == "in progress") {
         inProgress = true;
     }
 }
 else if(request.action == toHTML) {
-    if(Doc.admin.toHTML(request.d, v) == "in progress") {
+    if(Doc.admin.toHTML(request.d) == "in progress") {
         inProgress = true;
     }
 }
@@ -48,7 +46,7 @@ else if(request.id) {
 }
 else if (request.action != switchVersion) {
     if(request.src && request.src.trim() != ""){
-        db.doc.src.save({filename: request.src, ts: new Date(), version : v});
+        db.doc.src.save({filename: request.src, ts: new Date()});
     }
 }
 
@@ -58,11 +56,8 @@ if(inProgress) { %>
 
 <% } else { %>
 
-<div>Version <%= v %></div>
-
 <form method="POST" id="deleter">
   <input type="hidden" name="id" id="deleter_id" />
-  <input type="hidden" name="version" value="<%= v %>" />
 </form>
 
 <script type="text/javascript">
@@ -85,23 +80,13 @@ This may take a while (give a couple seconds per file).
 
 <form method="POST" onsubmit="showMessage()">
   <div class="field"><legend>Write to </legend><input type="text" name="d" value="doc/" /></div>
-  <div class="field"><legend>Version </legend><input type="text" name="version" value="<%= v %>" /><input type="submit" name="action" value="<%= switchVersion %>" /></div>
   <input type="submit" name="action" value="<%= everything %>" />
   <input type="submit" name="action" value="<%= toDB %>" />
   <input type="submit" name="action" value="<%= toHTML %>" />
 </form>
 
-<%
-if(generatedHTML) {
-   %>
-   <a href="../../<%= request.d %>" target="_blank">Documentation</a>
-   <%
-}
-%>
-
 <h3>Sources to be included:</h3>
 <form method="POST">
-  <input type="hidden" name="version" value="<%= v %>" />
   <legend>Add a file or folder: </legend>
   <input type="text" width="30" name="src" />
   <input type="submit" name="addSrc" value="Add" />
@@ -109,7 +94,7 @@ if(generatedHTML) {
 
 <div id="srcs">
   <%
-     var srcs = db.doc.src.find({ version : v });
+     var srcs = db.doc.src.find();
      while(srcs.hasNext()) {
          var z = srcs.next();
          %>

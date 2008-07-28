@@ -19,19 +19,18 @@ core.util.doc();
 if(!Doc.admin) Doc.admin = {};
 
 // Get java and js src and send their doc to the db
-Doc.admin.toDB = function(version) {
+Doc.admin.toDB = function() {
     if(Util.Doc.inProgress) {
         return "in progress";
     }
     Util.Doc.initialize();
-    Util.Doc.setVersion(version);
 
     // clean out the doc collections
     db.doc.code.drop();
     db.doc.drop();
 
     // restock
-    var src = db.doc.src.find({version : version});
+    var src = db.doc.src.find();
     while(src.hasNext()) {
         var z = src.next();
         Util.Doc.srcToDb(z.filename);
@@ -39,17 +38,17 @@ Doc.admin.toDB = function(version) {
     Util.Doc.javaSrcsToDb();
 }
 
-Doc.admin.toHTML = function(out_dir, version) {
+Doc.admin.toHTML = function(out_dir) {
     if(Util.Doc.inProgress) {
         return "in progress";
     }
-    Util.Doc.dbToHTML(out_dir, version);
+    Util.Doc.dbToHTML(out_dir);
 }
 
-Doc.admin.all = function(out_dir, version) {
+Doc.admin.all = function(out_dir) {
     if(Util.Doc.inProgress) {
         return "in progress";
     }
-    this.toDB(version);
-    this.toHTML(out_dir, version);
+    this.toDB();
+    this.toHTML(out_dir);
 }

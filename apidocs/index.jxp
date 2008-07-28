@@ -25,10 +25,6 @@ else if(classname == "/")
 else
     title = classname.substring(1);
 
-//if(htmlheader) {
-//    htmlheader(title);
-//}
-//else {
    %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -42,9 +38,6 @@ else
   </head>
 
   <body>
-<%
-//}
-%>
 
     <div id="header">
       <form action="./search" method="POST">
