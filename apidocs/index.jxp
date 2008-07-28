@@ -104,7 +104,7 @@ cursor.forEach( function(blob) {
     var heirarchy = blob.name.split(".");
     for(var i=0; i<heirarchy.length; i++) {
         if(!(heirarchy[i] in curPkg)) {
-            checkIfExists(heirarchy, i);
+            checkIfExists(Object.extend([], heirarchy), i);
             curPkg[heirarchy[i]] = {};
         }
         curPkg = curPkg[heirarchy[i]];
