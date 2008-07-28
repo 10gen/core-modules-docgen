@@ -25,10 +25,10 @@ else if(classname == "/")
 else
     title = classname.substring(1);
 
-if(htmlheader) {
-    htmlheader(title);
-}
-else {
+//if(htmlheader) {
+//    htmlheader(title);
+//}
+//else {
    %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -43,7 +43,7 @@ else {
 
   <body>
 <%
-}
+//}
 %>
 
     <div id="header">
@@ -52,25 +52,8 @@ else {
       </form>
     </div>
 
-    <br />
 
-    <div id="content" class="apidocs">
-      <%
-         if (classname == "/") {
-             renderIndex();
-         }
-         else if (request.action == "Search") {
-             renderSearch();
-         }
-         else {
-             renderBody(classname);
-         }
-      %>
-
-    </div>
-</div>
-
-<div id="rightmain">
+<div id="rightmain" style="float: left">
   <div align="center"><a href="./">Class Index</a></div>
   <hr />
   <h2>Classes</h2>
@@ -129,6 +112,24 @@ printSidebar(pkgs, "", 0);
     </ul>
     <hr />
 
+</div>
+
+    <br />
+
+    <div id="content" class="apidocs">
+      <%
+         if (classname == "/") {
+             renderIndex();
+         }
+         else if (request.action == "Search") {
+             renderSearch();
+         }
+         else {
+             renderBody(classname);
+         }
+      %>
+
+    </div>
 </div>
 
 
