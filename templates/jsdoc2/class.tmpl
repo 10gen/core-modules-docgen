@@ -99,7 +99,7 @@ else {
 </if>
 
 <!-- ============================== methods summary ======================== -->
-<if test="data.methods.length">{! var ownMethods = data.methods.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
+<if test="data.methods.length">{! var ownMethods = data.methods.filter(function($){return !$.isNamespace}).sort(makeSortby("name")); !}
   <if test="ownMethods.length">
     <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}."><caption>Method Summary</caption>
       <thead><tr><th scope="col">Method Attributes</th><th scope="col">Method Name and Description</th></tr></thead>
