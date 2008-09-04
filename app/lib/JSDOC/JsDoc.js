@@ -115,8 +115,20 @@ JSDOC.JsDoc = function(/**object*/ opt) {
 
 	JSDOC.opt.srcFiles = this._getSrcFiles();
 	this._parseSrcFiles();
-	//var handler = symbols.handler;
-	this.symbolSet = JSDOC.Parser.symbols;
+
+        if( JSDOC.opt.b ) {
+            var classlist = JSDOC.opt.b.split(",");
+            this.symbolSet = { _index : {} };
+            for( var i in JSDOC.Parser.symbols._index ) {
+                if( classlist.indexOf(i) >= 0 ) {
+                    this.symbolSet._index[i] = JSDOC.Parser.symbols._index[i];
+                }
+            }
+        }
+        else {
+	    this.symbolSet = JSDOC.Parser.symbols;
+        }
+    
 	//this.symbolGroup.handler = handler;
 }
 

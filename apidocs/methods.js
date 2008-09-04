@@ -7,7 +7,6 @@ Methods = {
 
     linkToSymbol : function( symbol, pretty ) {
         var name = Methods.getName( symbol );
-        log("name: "+name);
         if( !pretty ) {
             if( symbol.alias )
                 pretty = symbol.alias;
@@ -29,7 +28,6 @@ Methods = {
 
     makeSrcLink : function( code ) {
         link = code.replace( /\//g, "." );
-        log("code: "+code+" link: "+link);
         return '<a href="code='+link+'">'+code+'</a>';
     },
 
