@@ -1,0 +1,15 @@
+{% with methods.getBorrowers( foo ) as borrowedMembers %}
+  {% with methods.getUnique( borrowedMembers, "memberOf" ).join( "," ) as contributers %}
+    {% for u in contributers %}
+      <dt>Fields borrowed from class {{ methods.linkToSymbol( u ) }}: </dt>
+      <dd>{% with methods.filterEqual( borrowedMembers, "memberOf", u )|dictsort:"name")) as members %}
+        {% for member in members %}
+          {{ methods.linkToSymbol( member.alias ).withText( member.name ) }}
+          {% if not forloop.last %}
+             ,
+          {% endif %}
+        {% endfor %}
+      </dd>
+    {% endfor %}
+  {% endwith %}
+{% endwith %}

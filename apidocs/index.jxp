@@ -46,7 +46,7 @@ else
     </div>
 
 
-<div id="rightmain" style="float: left">
+<div id="rightmain" style="float: left; width: 14em">
   <div align="center"><a href="./">Class Index</a></div>
   <hr />
   <h2>Classes</h2>
@@ -109,7 +109,7 @@ printSidebar(pkgs, "", 0);
 
     <br />
 
-    <div id="content" class="apidocs">
+    <div id="content" class="apidocs" style="margin-left: 15em;">
       <%
          if (classname == "/") {
              renderIndex();
@@ -139,29 +139,32 @@ function renderBody(classname) {
     }
 
     if (classname.startsWith("code=")) {
-        var suffix = classname.substring(classname.lastIndexOf("."));
-        var code = "/"+classname.substring(5, classname.lastIndexOf(".")).replace(/\./g, "/")+suffix;
-        var blob = db.doc.code.findOne({filename : code});
-
+        classname = classname.substring( 5 );
+        var suffix = classname.substring( classname.lastIndexOf( "." ) );
+        classname = classname.substring( 0, classname.lastIndexOf( "." ) ).replace(/\./g, "/");
+        var blob = db.doc.code.findOne( { filename : classname+suffix } );
         // if blob != null, blob.content should never be null, but you never know...
-        if(blob != null && blob.content != null) {
+        if( blob && blob.content ) {
             blob.content = "<br /><h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
+            print( blob.content );
         }
     }
     else {
         var blob = db.doc.findOne({name:classname});
+        if( blob && blob._index ) {
+            if( !Methods ) {
+                core.modules.docgen.apidocs.methods();
+            }
+            template = djang10.loadTemplate( "classTemplate" );
+            var id = blob.alias ? blob.alias : blob.name;
+            template( { methods : Methods, data : blob._index.symbolSet[ id ] } );
+        }
     }
-    if(blob == null || blob.content == null) {
+    if(blob == null ) {
         print(classname +" not found");
     }
-    else {
-        %>
-        <div>
-          <%= blob.content %>
-        </div>
-        <%
-    }
 }
+//        log( blob.alias+" " +blob.name+" "+tojson(blob._index));
 
 function renderIndex() {
     %>
@@ -196,4 +199,6 @@ function renderSearch() {
     <%
     }
 }
+
+
 %>

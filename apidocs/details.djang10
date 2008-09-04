@@ -1,0 +1,52 @@
+<div class="description">{{ methods.resolveLinks( member.desc ) }}
+  {% ifnotequal member.srcFile data.srcFile %}<br /><i>Defined in: </i> {{ methods.makeSrcLink( member.srcFile ) }}.{% endifnotequal %}
+  {% if member.author %}<br /><i>Author: </i>{{ member.author }}.{% endif %}
+</div>
+{% if member.example and member.example.length %}{% for example in member.example %}<pre class="code">{{ example }}</pre>{% endfor %}{% endif %}
+{% if member._params and member._params.length %}
+  <dl class="detailList"><dt class="heading">Parameters:</dt>
+    {% for item in member._params %}
+      <dt>
+        {% if item.type %}
+          <span class="light fixedFont">{{ methods.linkToSymbol(item.type) }}</span>
+        {% endif %}
+        <b>{{ methods.getName( item ) }}</b>
+        {% if item.isOptional %}<i>Optional{% if item.defaultValue %}, Default: {{ item.defaultValue }}{% endif %}</i>{% endif %}
+      </dt>
+      <dd>{{ methods.resolveLinks(item.desc) }}</dd>
+    {% endfor %}
+  </dl>
+{% endif %}
+{% if member.deprecated %}
+  <dl class="detailList"><dt class="heading">Deprecated:</dt><dt>{{ methods.resolveLinks(member.deprecated) }}</dt></dl>
+{% endif %}
+{% if member.since %}<dl class="detailList"><dt class="heading">Since:</dt><dd>{{  member.since  }}</dd></dl>{% endif %}
+{% if member.exceptions and member.exceptions.length %}
+  <dl class="detailList">
+    <dt class="heading">Throws:</dt>
+    {% for item in member.exceptions %}
+      <dt>
+        {% if item.type %}
+          <span class="light fixedFont">{{ methods.linkToSymbol( item.type ) }}</span>
+        {% endif %}
+        <b>{{ item.name }}</b>
+      </dt>
+      <dd>{{ methods.resolveLinks(item.desc) }}</dd>
+    {% endfor %}
+  </dl>
+{% endif %}
+{% if member.requires and member.requires.length %}
+  <dl class="detailList"><dt class="heading">Requires:</dt>
+    {% for item in member.requires %}
+    <dd>{{ methods.resolveLinks(item) }}</dd>
+    {% endfor %}
+  </dl>
+{% endif %}
+{% if member.see and member.see.length %}
+  <dl class="detailList"><dt class="heading">See:</dt>
+    {% for item in member.see %}
+    <dd>{{ methods.linkToSymbol(item) }}</dd>
+    {% endfor %}
+  </dl>
+{% endif %}
+{% if not forloop.last %}<hr />{% endif %}

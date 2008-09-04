@@ -1,0 +1,257 @@
+{% autoescape off %}
+
+<!-- ============================== class title ============================ -->
+<h1 class="classTitle">
+
+{% if data.isBuiltin %}
+  Built-In&nbsp;
+{% endif %}
+
+{% if data.isExternalizable %}
+    Externalizable&nbsp;
+{% endif %}
+
+{% if data.isSerializable %}
+    Serializable&nbsp;
+{% endif %}
+
+{% if data.isAbstract %}
+    Abstract&nbsp;
+{% endif %}
+
+{% if data.isInterface %}
+    Interface&nbsp;
+{% endif %}
+
+{% if data.isNamespace %}
+    {% if data.is("FUNCTION") %}
+        Function&nbsp;
+    {% endif %}
+    Namespace&nbsp;
+{% else %}
+    Class&nbsp;
+{% endif %}
+
+{{ data.alias }}
+
+</h1>
+
+<!-- ============================== class summary ========================== -->
+<p class="description">
+  {{ data.desc }}
+  {% if data.example and data.example.length %}
+    {% for example in data.example %}
+      <pre class="code">{{ example }}</pre>
+    {% endfor %}
+  {% endif %}
+
+  {% if data.augments and data.augments.length %}
+    <br />Extends {{ methods.getArrayLinks( data.augments ) }}.<br />
+  {% endif %}
+  {% if not data.isBuiltin and data.srcFile %}
+    <br /><i>Defined in: </i> {{ methods.makeSrcLink( data.srcFile ) }}.
+  {% endif %}
+</p>
+
+<!-- ============================== constructor summary ==================== -->
+{% if data.constructors and data.constructors.length %}
+  <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {{ data.alias+}.">
+    <caption>Constructor Summary</caption>
+    <thead>
+      <tr>
+        <th scope="col">Constructor Attributes</th>
+        <th scope="col">Constructor Name and Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for member in data.constructors %}
+        <tr>
+          <td class="attributes">
+            {% include 'attributes' %}
+          </td>
+          <td class="nameDescription" >
+            <div class="fixedFont">
+              <b><a href="{{ data.name }}#constructor{{forloop.counter }}">{{ methods.getName( member ) }}</a></b>{% if not data.isNamespace %}{{ methods.makeSignature( member ) }}{% endif %}
+            </div>
+            <div class="description">{{ methods.resolveLinks( methods.summarize( member.desc ) ) }}</div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+<!-- ============================== properties summary ===================== -->
+{% if data.properties.length %}
+  {% with data.properties|dictsort:"name" as ownProperties %}
+  <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {{ data.alias }}.">
+    <caption>Field Summary</caption>
+    <thead><tr><th scope="col">Field Attributes</th><th scope="col">Field Name and Description</th></tr></thead>
+    <tbody>
+      {% for member in ownProperties %}
+      <tr>
+        <td class="attributes">
+          {% if member.type %}
+            {{ member.type }}&nbsp;<br />
+          {% endif %}
+          {% include 'attributes' %}
+        </td>
+        <td class="nameDescription">
+          <div class="fixedFont">
+            {% if member.isStatic %}
+              {% ifequal member.memberOf "_global_" %}
+                {{ member.memberOf }}.
+              {% endifequal %}
+            {% endif %}
+            <b><a href="{{ data.name }}#field{{forloop.counter }}">{{ methods.getName( member ) }}</a></b>
+          </div>
+          <div class="description">{{ methods.summarize( member.desc ) }}</div>
+          {% if member.deprecated %}
+            <b>Deprecated: </b>{{ member.deprecated }}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endwith %}
+  {% if data.inheritsFrom.length %}
+    <dl class="inheritsList">Fields borrowed from:
+      {% with data.properties as foo %}
+        {% include 'borrowers' %}
+      {% endwith %}
+    </dl>
+  {% endif %}
+{% endif %}
+
+<!-- ============================== methods summary ======================== -->
+{% if data.methods.length %}
+  {% with data.methods|dictsort:"name" as ownMethods %}
+  <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {{ data.alias }}."><caption>Method Summary</caption>
+    <thead><tr><th scope="col">Method Attributes</th><th scope="col">Method Name and Description</th></tr></thead>
+    <tbody>
+      {% for member in ownMethods %}
+        <tr>
+          <td class="attributes">
+            {% if member.returns and member.returns[0] %}
+              {{ member.returns[0].type }}&nbsp;
+            {% endif %}
+            <br />
+            {% include 'attributes' %}
+          </td>
+          <td class="nameDescription">
+            <div class="fixedFont">{% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}{{ member.memberOf }}.{% endifnotequal %}{% endif %}<b><a href="{{ data.name }}#method{{forloop.counter }}">{{ methods.getName( member ) }}</a></b>{{ methods.makeSignature(member) }}</div>
+            <div class="description">{{ methods.summarize(member.desc) }}</div>
+            {% if member.deprecated %}
+              <b>Deprecated: </b>{{ member.deprecated }}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endwith %}
+{% endif %}
+{% if data.inheritsFrom.length %}
+<dl class="inheritsList">Methods borrowed from:
+  {% with data.methods as foo %}
+    {% include 'borrowers' %}
+  {% endwith %}
+</dl>
+{% endif %}
+
+<!-- ============================== anonymous inner classes summary ==================== -->
+{% if data.anonymous and data.anonymous.length %}
+  {% with data.anonymous|dictsort:"name" as ownAnon %}
+  {% if ownAnon.length %}
+    <table class="summaryTable" cellspacing="0" summary="A summary of the anonymous inner classes documented in the class {{ data.alias }}."><caption>Entities Exposed to JavaScript Summary</caption>
+      <thead><tr><th scope="col">Parameters</th><th scope="col">Name and Description</th></tr></thead>
+      <tbody>
+        {% for member in ownAnon %}
+          <tr>
+            <td class="attributes">
+              {% if member.returns and member.returns[0] %}<b>{{ member.returns[0].type }}</b>&nbsp;{% endif %}
+              {% if member.isField and member.type %}<b>{{ member.type }}</b>&nbsp;{% endif %}
+            </td>
+            <td class="nameDescription">
+              <div class="fixedFont">{% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}{{ member.memberOf }}.{% endifnotequal %}{% endif %}
+                <b><a href="{{ data.name }}#anon{{forloop.counter }}">{{ methods.getName( member ) }}</a></b>{% if not member.isField %}{{ methods.makeSignature(member) }}{% endif %}
+              </div>
+              <div class="description">{{ methods.resolveLinks( methods.summarize( member.desc ) ) }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  {% endwith %}
+{% endif %}
+
+<div class="details">
+{% if data.constructors and data.constructors.length %}
+<!-- ============================== constructor details ==================== -->
+  <div class="sectionTitle">Constructor Detail</div>
+    {% for member in data.constructors %}
+      <a name="constructor{{ forloop.counter }}"></a>
+      <div class="fixedFont">
+        {% include 'attributes' %}
+        <b>{{  member.name  }}</b>{% ifnotequal member.isa 'Namespace' %}{{ methods.makeSignature(member) }}{% endifnotequal %}
+      </div>
+      {% include 'details' %}
+    {% endfor %}
+{% endif %}
+
+{% if data.properties and data.properties.length %}
+<!-- ============================== field details ========================== -->
+<div class="sectionTitle">Field Detail</div>
+  {% for member in data.properties %}
+    <a name="field{{ forloop.counter }}"></a>
+    <div class="fixedFont">
+      {% include 'attributes' %}
+      {% if member.type %}<span class="light">{{ methods.linkToSymbol(member.type) }}</span>{% endif %}
+      {% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}<span class="light">{{ member.memberOf }}.</span>{% endifnotequal %}{% endif %}<b>{{ methods.getName( member ) }}</b>
+    </div>
+    {% include 'details' %}
+  {% endfor %}
+{% endif %}
+
+{% if data.methods and data.methods.length %}
+  <!-- ============================== method details ========================= -->
+  <div class="sectionTitle">Method Detail</div>
+  {% for member in data.methods|dictsort:"name" %}
+    <a name="method{{ forloop.counter }}"></a>
+    <div class="fixedFont">
+      {% include 'attributes' %}
+      {% if member.type %}
+        <span class="light">{% templatetag openbrace %}{{ member.type }}{% templatetag closebrace %}</span>
+      {% endif %}
+      {% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}<span class="light">{{ member.memberOf }}.</span>{% endifnotequal %}{% endif %}<b>{{ methods.getName( member ) }}</b>{{ methods.makeSignature(member) }}
+    </div>
+    {% include 'details' %}
+  {% endfor %}
+{% endif %}
+
+<!-- ============================== anonymous inner classes details ========================= -->
+{% if data.anonymous and data.anonymous.length %}
+  <div class="sectionTitle">Entities Exposed to JavaScript Detail</div>
+  {% for member in data.anonymous %}
+    <a name="anon{{ forloop.counter }}"></a>
+    <div class="fixedFont">
+      {% include 'attributes' %}
+      {% if member.type %}<span class="light">{{ methods.linkToSymbol(member.type) }}</span>{% endif %}
+      {% if member.isStatic %}
+        {% ifnotequal member.memberOf "_global_" %}
+          <span class="light">{{ member.memberOf }}.</span>
+        {% endifnotequal %}
+      {% endif %}
+      <b>{{ methods.getName( member ) }}</b>
+      {% if not member.isField %}
+        {{ methods.makeSignature(member) }}
+      {% endif %}
+    </div>
+    {% include 'details' %}
+  {% endfor %}
+{% endif %}
+
+</div>
+{% endautoescape %}

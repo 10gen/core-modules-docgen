@@ -1,0 +1,15 @@
+{% if member.isPrivate %}
+  &lt;private&gt;
+{% endif %}
+{% if member.isProtected %}
+  &lt;protected&gt;
+{% endif %}
+{% if member.isInner %}
+  &lt;inner&gt;
+{% endif %}
+{% if member.isStatic %}
+  &lt;static&gt;
+{% endif %}
+{% if member.isConstant %}
+  &lt;constant&gt;
+{% endif %}
