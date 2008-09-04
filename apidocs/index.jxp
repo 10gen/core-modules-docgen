@@ -53,53 +53,9 @@ else
   <ul class="classList">
     <%
 
-var cursor = db.doc.find().sort({name:1});
-var pkgs = {};
+//sidebar
+Sidebar.printSidebar(Sidebar.pkgs, "", 0);
 
-var checkIfExists = function(h, idx) {
-    while(h.length > idx+1) h.pop();
-    var path = h.join(".");
-    var obj = db.doc.findOne({name : path});
-    // if there is not already an object with this name, create a placeholder
-    if (obj == null) {
-        obj = {
-            _index : {},
-            content : '<br /><div id="content"><h1 class="classTitle">'+path+'</h1><p class="description">There is no documentation for this package, yet.</p></div>',
-            name : path,
-            desc : "",
-            ts: new Date(),
-            version : null
-        };
-        db.doc.save(obj);
-    }
-}
-
-// create a table based on the class heirarchy
-cursor.forEach( function(blob) {
-    var curPkg = pkgs;
-    var heirarchy = blob.name.split(".");
-    for(var i=0; i<heirarchy.length; i++) {
-        if(!(heirarchy[i] in curPkg)) {
-            checkIfExists(Object.extend([], heirarchy), i);
-            curPkg[heirarchy[i]] = {};
-        }
-        curPkg = curPkg[heirarchy[i]];
-    }
-});
-
-// traverse the tree to print the classes
-function printSidebar(curPkg, curPath, indent) {
-    for(var k in curPkg) {
-        %>
-        <div>
-        <a href="<%= curPath+k %>" style="font-weight: normal; font-size: 100%; margin-left: <%= indent %>em;"><%= k %></a>
-        </div>
-        <%
-        printSidebar(curPkg[k], curPath+k+".", indent+1);
-    }
-}
-
-printSidebar(pkgs, "", 0);
 
 %>
     </ul>
@@ -138,11 +94,12 @@ function renderBody(classname) {
         classname = classname.substring(1);
     }
 
-    if (classname.startsWith("code=")) {
-        classname = classname.substring( 5 );
+    if (classname.startsWith( "code=" )) {
         var suffix = classname.substring( classname.lastIndexOf( "." ) );
+        classname = classname.substring( "code=".length() );
         classname = classname.substring( 0, classname.lastIndexOf( "." ) ).replace(/\./g, "/");
         var blob = db.doc.code.findOne( { filename : classname+suffix } );
+
         // if blob != null, blob.content should never be null, but you never know...
         if( blob && blob.content ) {
             blob.content = "<br /><h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
@@ -157,6 +114,7 @@ function renderBody(classname) {
             }
             template = djang10.loadTemplate( "classTemplate" );
             var id = blob.alias ? blob.alias : blob.name;
+
             template( { methods : Methods, data : blob._index.symbolSet[ id ] } );
         }
     }
