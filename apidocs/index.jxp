@@ -90,13 +90,13 @@ Sidebar.printSidebar(Sidebar.pkgs, "", 0);
 <%
 
 function renderBody(classname) {
-    if (classname != null) {
+    if (classname != null && classname.startsWith("/")) {
         classname = classname.substring(1);
     }
 
     if (classname.startsWith( "code=" )) {
         var suffix = classname.substring( classname.lastIndexOf( "." ) );
-        classname = classname.substring( "code=".length() );
+        classname = classname.substring( "code=".length );
         classname = classname.substring( 0, classname.lastIndexOf( "." ) ).replace(/\./g, "/");
         var blob = db.doc.code.findOne( { filename : classname+suffix } );
 
@@ -105,21 +105,29 @@ function renderBody(classname) {
             blob.content = "<br /><h1>"+blob.name+"</h1><br /><tt>"+blob.content.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;").replace(/\n/g, "<br />")+"</tt>";
             print( blob.content );
         }
+        else {
+            print( "Source for "+classname+" unavailable." );
+            return;
+        }
     }
     else {
         var blob = db.doc.findOne({name:classname});
         if( blob && blob._index ) {
-            if( !Methods ) {
-                core.modules.docgen.apidocs.methods();
+            if( blob.content ) {
+                print( blob.content );
             }
-            template = djang10.loadTemplate( "classTemplate" );
-            var id = blob.alias ? blob.alias : blob.name;
-
-            template( { methods : Methods, data : blob._index.symbolSet[ id ] } );
+            else {
+                if( !Methods ) {
+                    core.modules.docgen.apidocs.methods();
+                }
+                template = djang10.loadTemplate( "classTemplate" );
+                var id = blob.alias ? blob.alias : blob.name;
+                template( { methods : Methods, data : blob._index.symbolSet[ id ] } );
+            }
         }
-    }
-    if(blob == null ) {
-        print(classname +" not found");
+        else {
+            print(classname +" not found");
+        }
     }
 }
 //        log( blob.alias+" " +blob.name+" "+tojson(blob._index));
