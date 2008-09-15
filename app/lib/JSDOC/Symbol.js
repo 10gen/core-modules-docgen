@@ -36,6 +36,7 @@ JSDOC.Symbol.prototype.init = function() {
 	this.defaultValue = undefined;
 	this.deprecated = "";
 	this.desc = "";
+    this.docpkg = [];
 	this.events = [];
 	this.example = [];
 	this.exceptions = [];
@@ -536,6 +537,10 @@ JSDOC.Symbol.prototype.setTags = function() {
 	/*t:
 		// todo
 	*/
+    var pkgs = this.comment.getTag("docpkg");
+    if ( pkgs.length ) {
+        this.docpkg = pkgs.map( function($) { return $.desc; } );
+    }
 }
 
 JSDOC.Symbol.prototype.is = function(what) {

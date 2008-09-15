@@ -47,15 +47,15 @@ var createHeirarchy = function( str, curPkg ) {
 
 // create a table based on the class heirarchy
 cursor.forEach( function(blob) {
-    var curPkg = Sidebar.pkgs;
     if( blob.packages && blob.packages.length > 0 ) {
         for( pkg in blob.packages ) {
+            var curPkg = Sidebar.pkgs;
             curPkg = createHeirarchy( blob.packages[pkg], curPkg );
             curPkg[ blob.alias ] = {};
         }
     }
     else {
-        createHeirarchy( blob.name, curPkg );
+        createHeirarchy( blob.name, Sidebar.pkgs );
     }
 });
 
