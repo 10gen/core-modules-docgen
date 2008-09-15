@@ -32,7 +32,7 @@
     Class&nbsp;
 {% endif %}
 
-{{ data.alias }}
+{{ title }}
 
 </h1>
 

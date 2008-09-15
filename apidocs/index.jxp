@@ -110,9 +110,8 @@ function renderBody(classname) {
         }
     }
     else {
-        classname = classname.substring( classname.lastIndexOf(".") + 1 );
-        var blob = db.doc.findOne({ alias : classname });
-        if( blob && blob._index ) {
+        var blob = db.doc.findOne({ name : classname });
+        if( blob && blob.symbolSet ) {
             if( blob.content ) {
                 print( blob.content );
             }
@@ -121,8 +120,7 @@ function renderBody(classname) {
                     core.modules.docgen.apidocs.methods();
                 }
                 template = djang10.loadTemplate( "classTemplate" );
-                var id = blob.alias ? blob.alias : blob.name;
-                template( { methods : Methods, data : blob._index.symbolSet[ id ] } );
+                template( { methods : Methods, title: blob.name, data : blob.symbolSet } );
             }
         }
         else {
