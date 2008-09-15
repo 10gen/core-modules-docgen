@@ -58,9 +58,8 @@ Sidebar.printSidebar(Sidebar.pkgs, "", 0);
 
 
 %>
-    </ul>
-    <hr />
-
+  </ul>
+  <hr />
 </div>
 
     <br />
@@ -111,7 +110,8 @@ function renderBody(classname) {
         }
     }
     else {
-        var blob = db.doc.findOne({name:classname});
+        classname = classname.substring( classname.lastIndexOf(".") + 1 );
+        var blob = db.doc.findOne({ alias : classname });
         if( blob && blob._index ) {
             if( blob.content ) {
                 print( blob.content );

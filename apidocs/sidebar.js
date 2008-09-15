@@ -33,16 +33,29 @@ var checkIfExists = function(h, idx) {
     }
 }
 
-// create a table based on the class heirarchy
-cursor.forEach( function(blob) {
-    var curPkg = Sidebar.pkgs;
-    var heirarchy = blob.name.split(".");
+var createHeirarchy = function( str, curPkg ) {
+    var heirarchy = str.split(".");
     for(var i=0; i<heirarchy.length; i++) {
         if( !(heirarchy[i] in curPkg) ) {
             checkIfExists(Object.extend([], heirarchy), i);
             curPkg[heirarchy[i]] = {};
         }
         curPkg = curPkg[heirarchy[i]];
+    }
+    return curPkg;
+}
+
+// create a table based on the class heirarchy
+cursor.forEach( function(blob) {
+    var curPkg = Sidebar.pkgs;
+    if( blob.packages && blob.packages.length > 0 ) {
+        for( pkg in blob.packages ) {
+            curPkg = createHeirarchy( blob.packages[pkg], curPkg );
+            curPkg[ blob.alias ] = {};
+        }
+    }
+    else {
+        createHeirarchy( blob.name, curPkg );
     }
 });
 
