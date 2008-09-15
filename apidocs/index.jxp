@@ -111,17 +111,15 @@ function renderBody(classname) {
     }
     else {
         var blob = db.doc.findOne({ name : classname });
-        if( blob && blob.symbolSet ) {
-            if( blob.content ) {
-                print( blob.content );
+        if( blob && blob.content ) {
+            print( blob.content );
+        }
+        else if( blob && blob.symbolSet ) {
+            if( !Methods ) {
+                core.modules.docgen.apidocs.methods();
             }
-            else {
-                if( !Methods ) {
-                    core.modules.docgen.apidocs.methods();
-                }
-                template = djang10.loadTemplate( "classTemplate" );
-                template( { methods : Methods, title: blob.name, data : blob.symbolSet } );
-            }
+            template = djang10.loadTemplate( "classTemplate" );
+            template( { methods : Methods, title: blob.name, data : blob.symbolSet } );
         }
         else {
             print(classname +" not found");
