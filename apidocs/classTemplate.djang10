@@ -38,10 +38,14 @@
 
 <!-- ============================== class summary ========================== -->
 <p class="description">
-  {{ data.desc }}
+  {% if data.classDesc %}
+    {{ data.classDesc }}
+  {% else %}
+    {{ data.desc }}
+  {% endif %}
   {% if data.example and data.example.length %}
     {% for example in data.example %}
-      <pre class="code">{{ example }}</pre>
+      <pre class="code">{{ example.desc }}</pre>
     {% endfor %}
   {% endif %}
 

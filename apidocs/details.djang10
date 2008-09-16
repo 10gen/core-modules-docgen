@@ -2,7 +2,7 @@
   {% ifnotequal member.srcFile data.srcFile %}<br /><i>Defined in: </i> {{ methods.makeSrcLink( member.srcFile ) }}.{% endifnotequal %}
   {% if member.author %}<br /><i>Author: </i>{{ member.author }}.{% endif %}
 </div>
-{% if member.example and member.example.length %}{% for example in member.example %}<pre class="code">{{ example }}</pre>{% endfor %}{% endif %}
+{% if member.example and member.example.length %}{% for example in member.example %}<pre class="code">{{ example.desc }}</pre>{% endfor %}{% endif %}
 {% if member._params and member._params.length %}
   <dl class="detailList"><dt class="heading">Parameters:</dt>
     {% for item in member._params %}
