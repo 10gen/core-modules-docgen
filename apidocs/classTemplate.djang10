@@ -24,9 +24,9 @@
 {% endif %}
 
 {% if data.isNamespace %}
-    {% if data.is("FUNCTION") %}
+    {% ifequal data.isa "FUNCTION" %}
         Function&nbsp;
-    {% endif %}
+    {% endifequal %}
     Namespace&nbsp;
 {% else %}
     Class&nbsp;
