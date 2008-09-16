@@ -83,7 +83,7 @@
 
 <!-- ============================== properties summary ===================== -->
 {% if data.properties.length %}
-  {% with data.properties|dictsort:"name" as ownProperties %}
+  {% with data.properties|dictsort:"_name" as ownProperties %}
   <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {{ data.alias }}.">
     <caption>Field Summary</caption>
     <thead><tr><th scope="col">Field Attributes</th><th scope="col">Field Name and Description</th></tr></thead>
@@ -126,7 +126,7 @@
 
 <!-- ============================== methods summary ======================== -->
 {% if data.methods.length %}
-  {% with data.methods|dictsort:"name" as ownMethods %}
+  {% with data.methods|dictsort:"_name" as ownMethods %}
   <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {{ data.alias }}."><caption>Method Summary</caption>
     <thead><tr><th scope="col">Method Attributes</th><th scope="col">Method Name and Description</th></tr></thead>
     <tbody>
@@ -204,7 +204,7 @@
 {% if data.properties and data.properties.length %}
 <!-- ============================== field details ========================== -->
 <div class="sectionTitle">Field Detail</div>
-  {% for member in data.properties %}
+  {% for member in data.properties|dictsort:"_name" %}
     <a name="field{{ forloop.counter }}"></a>
     <div class="fixedFont">
       {% include 'attributes' %}
@@ -218,7 +218,7 @@
 {% if data.methods and data.methods.length %}
   <!-- ============================== method details ========================= -->
   <div class="sectionTitle">Method Detail</div>
-  {% for member in data.methods|dictsort:"name" %}
+  {% for member in data.methods|dictsort:"_name" %}
     <a name="method{{ forloop.counter }}"></a>
     <div class="fixedFont">
       {% include 'attributes' %}
@@ -234,7 +234,7 @@
 <!-- ============================== anonymous inner classes details ========================= -->
 {% if data.anonymous and data.anonymous.length %}
   <div class="sectionTitle">Entities Exposed to JavaScript Detail</div>
-  {% for member in data.anonymous %}
+  {% for member in data.anonymous|dictsort:"name" %}
     <a name="anon{{ forloop.counter }}"></a>
     <div class="fixedFont">
       {% include 'attributes' %}
