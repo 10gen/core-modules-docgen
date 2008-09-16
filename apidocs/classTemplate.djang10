@@ -271,6 +271,18 @@
       {% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}<span class="light">{{ member.memberOf }}.</span>{% endifnotequal %}{% endif %}<b>{{ methods.getName( member ) }}</b>{{ methods.makeSignature(member) }}
     </div>
     {% include 'details' %}
+    {% if member.returns.length %}
+      <dl class="detailList"><dt class="heading">Returns:</dt>
+        {% for item in member.returns %}
+          <dd>
+            {% if item.type %} 
+              <span class="light fixedFont">{{ methods.linkToSymbol(item.type) }}</span>
+            {% endif %}
+            {{ methods.resolveLinks(item.desc) }}
+          </dd>
+        {% endfor %}
+      </dl>
+    {% endif %}    
   {% endfor %}
 {% endif %}
 
