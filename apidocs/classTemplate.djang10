@@ -79,6 +79,33 @@
       {% endfor %}
     </tbody>
   </table>
+{% else %}
+  {% if data._params.length %}
+    <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {{ data.alias+}.">
+    <caption>Constructor Summary</caption>
+    <thead>
+      <tr>
+        <th scope="col">Constructor Attributes</th>
+        <th scope="col">Constructor Name and Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% with data as member %}
+      <tr>
+        <td class="attributes">
+          {% include 'attributes' %}
+        </td>
+        <td class="nameDescription" >
+          <div class="fixedFont">
+            <b><a href="{{ data.name }}#constructor0">{{ data._name }}</a></b>{% if not data.isNamespace %}{{ methods.makeSignature( member ) }}{% endif %}
+          </div>
+          <div class="description">{{ methods.summarize( member.desc ) }}</div>
+        </td>
+      </tr>
+      {% endwith %}
+    </tbody>
+  </table>
+  {% endif %}
 {% endif %}
 
 <!-- ============================== properties summary ===================== -->
@@ -199,6 +226,18 @@
       </div>
       {% include 'details' %}
     {% endfor %}
+{% else %}
+  {% if data._params.length %}
+  <div class="sectionTitle">Constructor Detail</div>
+    {% with data as member %}
+      <a name="constructor0"></a>
+      <div class="fixedFont">
+        {% include 'attributes' %}
+        <b>{{  data._name  }}</b>{% ifnotequal member.isa 'Namespace' %}{{ methods.makeSignature(member) }}{% endifnotequal %}
+      </div>
+      {% include 'details' %}
+    {% endwith %}
+  {% endif %}
 {% endif %}
 
 {% if data.properties and data.properties.length %}
