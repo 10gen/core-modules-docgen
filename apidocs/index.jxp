@@ -111,15 +111,25 @@ function renderBody(classname) {
     }
     else {
         var blob = db.doc.findOne({ name : classname });
-        if( blob && blob.content ) {
-            print( blob.content );
-        }
-        else if( blob && blob.symbolSet ) {
-            if( !Methods ) {
-                core.modules.docgen.apidocs.methods();
+        if( blob ) {
+            if( blob.symbolSet ) {
+                if( !Methods ) {
+                    core.modules.docgen.apidocs.methods();
+                }
+                template = djang10.loadTemplate( "classTemplate" );
+                template( { methods : Methods, title: blob.name, data : blob.symbolSet } );
             }
-            template = djang10.loadTemplate( "classTemplate" );
-            template( { methods : Methods, title: blob.name, data : blob.symbolSet } );
+            // if there's no doc, look for a wiki
+            else {
+                var wikipage = db.wiki.findOne( { name : "apidocs."+classname } );
+                if( wikipage ) {
+                    print( wikipage.getParsedText() );
+                }
+                // if no wiki, just print "no doc" message
+                else {
+                    print( blob.content );
+                }
+            }
         }
         else {
             print(classname +" not found");

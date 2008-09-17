@@ -22,7 +22,6 @@ var checkIfExists = function(h, idx) {
     // if there is not already an object with this name, create a placeholder
     if (obj == null) {
         obj = {
-            symbolSet : {},
             content : '<br /><div id="content"><h1 class="classTitle">'+path+'</h1><p class="description">There is no documentation for this package, yet.</p></div>',
             name : path,
             desc : "",
