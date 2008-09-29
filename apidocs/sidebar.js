@@ -5,9 +5,9 @@ Sidebar.pkgs = {};
 // traverse the tree to print the classes
 Sidebar.printSidebar = function(curPkg, curPath, indent) {
     for(var k in curPkg) {
-        print('<div>');
-        print('<a href="' + (curPath+k) +'" style="font-weight: normal; font-size: 100%; margin-left: '+ indent +'em;">' + k + '</a>');
-        print('</div>');
+        print('<li style="margin-left: '+ indent +'em;">');
+        print('<a href="' + (curPath+k) +'">' + k + '</a>');
+        print('</li>');
         Sidebar.printSidebar(curPkg[k], curPath+k+".", indent+1);
     }
 }
