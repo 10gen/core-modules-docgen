@@ -122,8 +122,14 @@
       {% for member in ownProperties %}
       <tr>
         <td class="attributes">
+          {% if member.returns.length %}
+            <a href={{ member.returns[0].desc }}>
+          {% endif %}
           {% if member.type %}
             {{ member.type }}&nbsp;<br />
+          {% endif %}
+          {% if member.returns.length %}
+            </a>
           {% endif %}
           {% include 'attributes' %}
         </td>
@@ -165,7 +171,14 @@
         <tr>
           <td class="attributes">
             {% if member.returns and member.returns[0] %}
-              {{ member.returns[0].type }}&nbsp;
+              {% if member.returns[1] %}
+                <a href="{{ member.returns[1].desc }}">
+              {% endif %}
+              {{ member.returns[0].type }}
+              {% if member.returns[1] %}
+                </a>
+              {% endif %}
+              &nbsp;
             {% endif %}
             <br />
             {% include 'attributes' %}
@@ -201,8 +214,19 @@
         {% for member in ownAnon %}
           <tr>
             <td class="attributes">
-              {% if member.returns and member.returns[0] %}<b>{{ member.returns[0].type }}</b>&nbsp;{% endif %}
-              {% if member.isField and member.type %}<b>{{ member.type }}</b>&nbsp;{% endif %}
+              {% if member.returns[1] %}
+                <a href="{{ member.returns[1].desc }}">
+              {% endif %}
+              {% if member.returns and member.returns[0] %}
+                <b>{{ member.returns[0].type }}</b>&nbsp;
+              {% endif %}
+              {% if member.isField and member.type %}
+                <b>{{ member.type }}</b>&nbsp;
+              {% endif %}
+              {% if member.returns[1] %}
+                </a>
+              {% endif %}
+              &nbsp;
             </td>
             <td class="nameDescription">
               <div class="fixedFont">{% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}{{ member.memberOf }}.{% endifnotequal %}{% endif %}
