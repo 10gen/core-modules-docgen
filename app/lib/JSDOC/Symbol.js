@@ -57,6 +57,7 @@ JSDOC.Symbol.prototype.init = function() {
 	this.properties = [];
 	this.requires = [];
 	this.returns = [];
+    this.returnpkg = [];
 	this.see = [];
 	this.since = "";
 	this.srcFile = {};
@@ -425,6 +426,28 @@ JSDOC.Symbol.prototype.setTags = function() {
 	if (returns.length) { // there can be many return tags in a single doclet
 		this.returns = returns;
 		this.type = returns.map(function($){return $.type}).join(", ");
+	}
+
+	// @returnpkg
+	returns = this.comment.getTag("returnpkg");
+	if (returns.length) {
+            this.returns = [ {} ];
+            var str = returns[0].desc;
+            var typeIndex = str.indexOf( " " );
+            if( typeIndex == -1 ) {
+                this.returns[0].url = str;
+            }
+            else {
+                this.returns[0].url = str.substring( 0, typeIndex );
+                var descIndex = str.substring( typeIndex+1 ).indexOf( " " );
+                if( descIndex == -1 ) {
+                    this.returns[0].type = str.substring( typeIndex + 1 );
+                }
+                else {
+                    this.returns[0].type = str.substring( typeIndex+1, typeIndex+descIndex );
+                    this.returns[0].desc = str.substring( typeIndex+descIndex+1 );
+                }
+            }
 	}
 	
 	/*t:

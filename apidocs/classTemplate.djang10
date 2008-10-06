@@ -122,13 +122,13 @@
       {% for member in ownProperties %}
       <tr>
         <td class="attributes">
-          {% if member.returns.length %}
-            <a href={{ member.returns[0].desc }}>
+          {% if member.returns and member.returns[0] and member.returns[0].url %}
+            <a href="{{ member.returns[0].url }}">
           {% endif %}
           {% if member.type %}
             {{ member.type }}&nbsp;<br />
           {% endif %}
-          {% if member.returns.length %}
+          {% if member.returns and member.returns[0] and member.returns[0].url %}
             </a>
           {% endif %}
           {% include 'attributes' %}
@@ -171,11 +171,11 @@
         <tr>
           <td class="attributes">
             {% if member.returns and member.returns[0] %}
-              {% if member.returns[1] %}
-                <a href="{{ member.returns[1].desc }}">
+              {% if member.returns[0].url %}
+                <a href="{{ member.returns[0].url }}">
               {% endif %}
               {{ member.returns[0].type }}
-              {% if member.returns[1] %}
+              {% if member.returns[0].url %}
                 </a>
               {% endif %}
               &nbsp;
@@ -214,8 +214,8 @@
         {% for member in ownAnon %}
           <tr>
             <td class="attributes">
-              {% if member.returns[1] %}
-                <a href="{{ member.returns[1].desc }}">
+              {% if member.returns and member.returns[0] and member.returns[0].url %}
+                <a href="{{ member.returns[0].url }}">
               {% endif %}
               {% if member.returns and member.returns[0] %}
                 <b>{{ member.returns[0].type }}</b>&nbsp;
@@ -223,7 +223,7 @@
               {% if member.isField and member.type %}
                 <b>{{ member.type }}</b>&nbsp;
               {% endif %}
-              {% if member.returns[1] %}
+              {% if member.returns and member.returns[0] and member.returns[0].url %}
                 </a>
               {% endif %}
               &nbsp;

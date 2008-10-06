@@ -106,7 +106,6 @@ function renderBody(classname) {
         }
         else {
             print( "Source for "+classname+" unavailable." );
-            return;
         }
     }
     else {
@@ -138,22 +137,6 @@ function renderBody(classname) {
 }
 //        log( blob.alias+" " +blob.name+" "+tojson(blob._index));
 
-function renderIndex() {
-    %>
-    <h1 class="classTitle">Class Index</h1>
-
-    <%
-    var cursor = db.doc.find().sort({name:1});
-    cursor.forEach( function(blob) {
-       var text = blob.alias ? blob.alias : blob.name;
-        %>
-        <div>
-          <h2><a href="<%= blob.name %>"><%= text %></a></h2>
-          <p><%= blob.desc ? blob.desc : "" %></p>
-        </div>
-        <%
-    });
-}
 
 function renderSearch() {
     %>
