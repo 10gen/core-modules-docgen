@@ -49,4 +49,3 @@
     {% endfor %}
   </dl>
 {% endif %}
-{% if not forloop.last %}<hr />{% endif %}

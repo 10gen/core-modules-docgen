@@ -279,6 +279,7 @@
       {% if member.isStatic %}{% ifnotequal member.memberOf "_global_" %}<span class="light">{{ member.memberOf }}.</span>{% endifnotequal %}{% endif %}<b>{{ methods.getName( member ) }}</b>
     </div>
     {% include 'details' %}
+    {% if not forloop.last %}<hr />{% endif %}
   {% endfor %}
 {% endif %}
 
@@ -307,6 +308,7 @@
         {% endfor %}
       </dl>
     {% endif %}    
+    {% if not forloop.last %}<hr />{% endif %}
   {% endfor %}
 {% endif %}
 
@@ -329,6 +331,7 @@
       {% endif %}
     </div>
     {% include 'details' %}
+    {% if not forloop.last %}<hr />{% endif %}
   {% endfor %}
 {% endif %}
 
